@@ -4,7 +4,7 @@ local widget = require( "widget" )
 local multiHandler = require( "multiHandler" )
 
 local backButton, background, settingsButton, onePlayerButton, twoPlayerButton, highScoreButton
-local createButton, findButton, tableView
+local createButton, tableView
 local customFont
 local client, server, isClient, isServer, myPlayerID, playerDropped, clientDropped, numPlayers, clients, numberOfServers, connectionAttemptFailed
 
@@ -41,6 +41,11 @@ end
 function scene:enterScene( event )
     local group = self.view
 
+    makeClient()
+    
+    Runtime:addEventListener("autolanServerFound", createListItem)
+    Runtime:addEventListener("autolanConnected", connectedToServer)
+
     -- Create Button
     local function handleCreatePress( event )
        if ( "ended" == event.phase ) then
@@ -50,30 +55,13 @@ function scene:enterScene( event )
     end
     createButton = widget.newButton
     {
-        x = (display.contentWidth)/2-300,
+        x = (display.contentWidth)/2,
         y = (display.contentHeight)*(2/3),
         width = 210,
         height = 80,
         defaultFile = "Assets/createButton.png",
         overFile = "Assets/createButtonPressed.png",
         onEvent = handleCreatePress
-    }
-
-    -- Find Button
-    local function handleFindPress( event )
-       if ( "ended" == event.phase ) then
-            makeClient()
-        end
-    end
-    findButton = widget.newButton
-    {
-        x = (display.contentWidth)/2+275,
-        y = (display.contentHeight)*(2/3),
-        width = 210,
-        height = 80,
-        defaultFile = "Assets/findButton.png",
-        overFile = "Assets/findButtonPressed.png",
-        onEvent = handleFindPress
     }
 
     --TableView
@@ -109,6 +97,17 @@ function scene:enterScene( event )
         onRowTouch = onRowTouch,
     }
     tableView = widget.newTableView( options )
+
+    function insertARow(serverName, customBroadcast, serverIP)
+        tableView:insertRow
+        {
+            rowColor = { default = { 255, 255, 255, 0 }},
+            lineColor = { 1, 1, 1 },
+            rowHeight = 100,
+            params = { gameRoomName = serverName, description = customBroadcast, serverIP = serverIP},
+        }
+        numberOfServers = numberOfServers+1
+    end
 
     -- Settings button event listener, dummy button, blur effect
     local function handleSettingsPress( event )
@@ -177,8 +176,11 @@ function scene:enterScene( event )
             tableView = nil
             createButton:removeSelf( )
             createButton = nil
-            findButton:removeSelf( )
-            findButton = nil
+            Runtime:removeEventListener("autolanConnectionFailed", connectionAttemptFailed)
+            Runtime:removeEventListener("autolanDisconnected", connectionAttemptFailed)
+            Runtime:removeEventListener("autolanPlayerJoined", addPlayer)
+            Runtime:removeEventListener("autolanServerFound", createListItem)
+            Runtime:removeEventListener("autolanConnected", connectedToServer)
             storyboard.hideOverlay( "fade", 200 )
         end
     end
@@ -253,17 +255,6 @@ function makeServer()
     Runtime:addEventListener("autolanPlayerJoined", addPlayer)
 end
 
-addPlayer = function(event)
-    local client = event.client --this is the client object, used to send messages
-    print("player joined",client)
-    --look for a client slot
-    numPlayers = numPlayers+1
-    clients[numPlayers] = client
-    client:sendPriority({1,numPlayers}) --initialization packet
-    client:sendPriority(getFullGameState()) --initialization packet 
-    server:setCustomBroadcast(numPlayers.." Players")
-end
-
 function makeClient()
     if(isServer) then --if we were a server before, we need to unregister all the event listeners
         isServer = false
@@ -276,15 +267,19 @@ function makeClient()
     Runtime:addEventListener("autolanDisconnected", connectionAttemptFailed)
 end
 
+addPlayer = function(event)
+    local client = event.client --this is the client object, used to send messages
+    print("player joined",client)
+    --look for a client slot
+    numPlayers = numPlayers+1
+    clients[numPlayers] = client
+    -- client:sendPriority({1,numPlayers}) --initialization packet
+    -- client:sendPriority(getFullGameState()) --initialization packet 
+    -- server:setCustomBroadcast(numPlayers.." Players")
+end
+
 function createListItem(event) --displays found servers
-    tableView:insertRow
-    {
-        rowColor = { default = { 255, 255, 255, 0 }},
-        lineColor = { 1, 1, 1 },
-        rowHeight = 100,
-        params = { gameRoomName = event.serverName, description = event.customBroadcast, serverIP = event.serverIP},
-    }
-    numberOfServers = numberOfServers+1
+    insertARow(event.serverName,event.customBroadcast,event.serverIP)
 end
 
 connectionAttemptFailed = function(event)
@@ -294,10 +289,6 @@ end
 function connectedToServer(event)
     print("connected, waiting for sync")
 end
-
-Runtime:addEventListener("autolanServerFound", createListItem)
-
-Runtime:addEventListener("autolanConnected", connectedToServer)
 
 scene:addEventListener( "createScene", scene )
 
