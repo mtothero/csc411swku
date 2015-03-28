@@ -6,8 +6,7 @@ local multiHandler = require( "multiHandler" )
 local backButton, background, settingsButton, onePlayerButton, twoPlayerButton, highScoreButton
 local createButton, findButton, tableView
 local customFont
-local roomName, roomIP
-local client, server, isClient, isServer, myPlayerID, playerDropped, clientDropped, numPlayers, clients, numberOfServers
+local client, server, isClient, isServer, myPlayerID, playerDropped, clientDropped, numPlayers, clients, numberOfServers, connectionAttemptFailed
 
 
 -- Called when the scene's view does not exist:
@@ -63,13 +62,6 @@ function scene:enterScene( event )
     -- Find Button
     local function handleFindPress( event )
        if ( "ended" == event.phase ) then
-            tableView:insertRow
-            {
-                rowColor = { default = { 255, 255, 255, 0 }},
-                lineColor = { 1, 1, 1 },
-                rowHeight = 100,
-                params = { input = roomInput, roomID = "Find Button" },
-            }
             makeClient()
         end
     end
@@ -84,29 +76,26 @@ function scene:enterScene( event )
         onEvent = handleFindPress
     }
 
-    roomIP = multiHandler:getIP()
-    roomInput = "Hello"
-
     --TableView
     local function onRowRender( event )
         local row = event.row
         local rowHeight = row.contentHeight
         local rowWidth = row.contentWidth
 
-        local roomID = display.newText(row, row.params.roomID, 0, 0, customFont, 40 )
-        roomID:setFillColor( 1 )
-        roomID.x = 140
-        roomID.y = row.height * 0.5
+        local gameRoomName = display.newText(row, row.params.gameRoomName, 0, 0, customFont, 40 )
+        gameRoomName:setFillColor( 1 )
+        gameRoomName.x = 140
+        gameRoomName.y = row.height * 0.5
 
-        local ip = display.newText(row, row.params.input, 0, 0, customFont, 40 )
+        local ip = display.newText(row, row.params.description, 0, 0, customFont, 40 )
         ip:setFillColor( 1 )
         ip.x = 650 
-        ip.y = row.height * 0.5
+        ip.y = row.height * 0.5 
     end
 
     local function onRowTouch( event )
         local row = event.row
-        print(row.params.roomID)
+        client:connect(row.params.serverIP)
     end
 
     local options =
@@ -251,10 +240,12 @@ end
 function makeServer()
     if(isClient) then --if we were a client before, we need to unregister all the event listeners
         isClient = false
+        Runtime:removeEventListener("autolanConnectionFailed", connectionAttemptFailed)
+        Runtime:removeEventListener("autolanDisconnected", connectionAttemptFailed)
     end
 
-    server = require("Server") 
-    server:setCustomBroadcast("1 Player") 
+    server = require("Server")
+    server:setCustomBroadcast("1 V 1") 
     server:start()
     isServer = true
 
@@ -277,11 +268,12 @@ function makeClient()
     if(isServer) then --if we were a server before, we need to unregister all the event listeners
         isServer = false
     end
-    print("making client")
     client = require("Client")
     client:start()
     client:scanServers()
     isClient = true
+    Runtime:addEventListener("autolanConnectionFailed", connectionAttemptFailed)
+    Runtime:addEventListener("autolanDisconnected", connectionAttemptFailed)
 end
 
 function createListItem(event) --displays found servers
@@ -290,12 +282,22 @@ function createListItem(event) --displays found servers
         rowColor = { default = { 255, 255, 255, 0 }},
         lineColor = { 1, 1, 1 },
         rowHeight = 100,
-        params = { input = event.serverName, roomID = event.customBroadcast },
+        params = { gameRoomName = event.serverName, description = event.customBroadcast, serverIP = event.serverIP},
     }
     numberOfServers = numberOfServers+1
 end
+
+connectionAttemptFailed = function(event)
+    print("connection failed")
+end
+
+function connectedToServer(event)
+    print("connected, waiting for sync")
+end
+
 Runtime:addEventListener("autolanServerFound", createListItem)
 
+Runtime:addEventListener("autolanConnected", connectedToServer)
 
 scene:addEventListener( "createScene", scene )
 
