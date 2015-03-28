@@ -267,21 +267,34 @@ function makeClient()
     Runtime:addEventListener("autolanDisconnected", connectionAttemptFailed)
 end
 
+function createListItem(event) --displays found servers
+    insertARow(event.serverName,event.customBroadcast,event.serverIP)
+end
+
+-- SERVER ACCEPTANCE CODE
 addPlayer = function(event)
     local client = event.client --this is the client object, used to send messages
-    print("player joined",client)
-    --look for a client slot
-    numPlayers = numPlayers+1
-    clients[numPlayers] = client
+    local function onComplete( event )
+    if event.action == "clicked" then
+            local i = event.index
+            if i == 2 then
+                print("player joined",client)
+                --look for a client slot
+                numPlayers = numPlayers+1
+                clients[numPlayers] = client
+            elseif i == 1 then
+                client:disconnect()
+                client = nil
+            end
+        end
+    end
+    native.showAlert( "Request", "Some wants to attack your house! Will you accept this request?", { "No", "Yes" }, onComplete )
     -- client:sendPriority({1,numPlayers}) --initialization packet
     -- client:sendPriority(getFullGameState()) --initialization packet 
     -- server:setCustomBroadcast(numPlayers.." Players")
 end
 
-function createListItem(event) --displays found servers
-    insertARow(event.serverName,event.customBroadcast,event.serverIP)
-end
-
+-- CLIENT ACCEPTANCE CODE
 connectionAttemptFailed = function(event)
     print("connection failed")
 end
