@@ -3,8 +3,7 @@ local scene = storyboard.newScene()
 local widget = require( "widget" )
 local multiHandler = require( "multiHandler" )
 
-local backButton, background, settingsButton, onePlayerButton, twoPlayerButton, highScoreButton
-local createButton, tableView
+local backButton, background, settingsButton, onePlayerButton, twoPlayerButton, highScoreButton, createButton, tableView
 local customFont
 local client, server, isClient, isServer, myPlayerID, playerDropped, clientDropped, numPlayers, clients, numberOfServers, connectionAttemptFailed
 
@@ -25,6 +24,8 @@ function scene:createScene( event )
         local phase = event.phase;
         local keyName = event.keyName;
         if ( "back" == keyName and phase == "up" ) then
+            tableView = nil
+            createButton = nil
             storyboard.hideOverlay( "fade", 200 )
             return true
         end
@@ -172,10 +173,6 @@ function scene:enterScene( event )
     -- Function to handle back button
     local function handleBackPress( event )
         if ( "ended" == event.phase ) then
-            tableView:removeSelf( )
-            tableView = nil
-            createButton:removeSelf( )
-            createButton = nil
             Runtime:removeEventListener("autolanConnectionFailed", connectionAttemptFailed)
             Runtime:removeEventListener("autolanDisconnected", connectionAttemptFailed)
             Runtime:removeEventListener("autolanPlayerJoined", addPlayer)
@@ -219,6 +216,10 @@ end
 
 -- Called when new scene has transitioned in
 function scene:didExitScene( event )
+    tableView:removeSelf( )
+    tableView = nil
+    createButton:removeSelf( )
+    createButton = nil
     backButton:removeSelf( )
     backButton = nil
     settingsButton:removeSelf()
@@ -236,7 +237,7 @@ end
 
 -- Called prior to the removal of scene's "view" (display group)
 function scene:destroyScene( event )
-	local group = self.view
+    local group = self.view
 end
 
 function makeServer()
@@ -282,6 +283,11 @@ addPlayer = function(event)
                 --look for a client slot
                 numPlayers = numPlayers+1
                 clients[numPlayers] = client
+                local options =         
+                {       
+                    params = { var1 = "nothing", var2 = server, var3 = clients, var4 = numPlayers}        
+                }       
+                storyboard.gotoScene( "testScreen", options ) 
             elseif i == 1 then
                 client:disconnect()
                 client = nil
@@ -301,6 +307,11 @@ end
 
 function connectedToServer(event)
     print("connected, waiting for sync")
+    local options =         
+    {       
+        params = { var1 = client, var2 = "nothing", var3 = "clients", var4 = numPlayers}        
+    }       
+    storyboard.gotoScene( "testScreen", options ) 
 end
 
 scene:addEventListener( "createScene", scene )

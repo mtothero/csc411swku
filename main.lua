@@ -34,7 +34,7 @@ Runtime:addEventListener("autolanDisconnected", autolanDisconnected)
 
 local function autolanReceived(event)
 	print("message = ", event.message) --this is the message we recieved from the server
-	print("autolanReceived")
+	print("autolanClientReceived")
 end
 Runtime:addEventListener("autolanReceived", autolanReceived)
 
@@ -69,7 +69,7 @@ Runtime:addEventListener("autolanPlayerDropped", autolanPlayerDropped)
 local function autolanReceived(event)
 	print("broadcast", event.client) --this is the object representing the connection. This is the same object given during the playerJoined event and you can use this to find out which client this is coming from
 	print("message," ,event.message) --this is the message from the client. You must use event.client to find out who it came from.
-	print("autolanReceived")
+	print("autolanServerReceived")
 end
 Runtime:addEventListener("autolanReceived", autolanReceived)
 

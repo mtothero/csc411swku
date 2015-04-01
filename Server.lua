@@ -196,7 +196,7 @@ local function connectClients() --checks to see if any new clients wish to conne
 					UDPBroadcaster:sendto(json.encode(handshakeTable),clientIP,clientPort )
 					UDPClient:settimeout(0)
 					UDPClients[numClients] = UDPClient					
-					----print("client connected", clientIP,clientPort)
+					print("client connected", clientIP,clientPort)
 					--create convenience player object
 					local newPlayer = {}
 					newPlayer.clientID = numClients
