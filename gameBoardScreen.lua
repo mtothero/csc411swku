@@ -17,9 +17,6 @@ function endGameScreen(scene, score)
         }
     }
     storyboard.gotoScene(scene, options)
-    --backButton.isVisible = true
-    
-    --bottleThrower.isVisible = false
 end
 
 
@@ -42,7 +39,8 @@ end
 -- Called immediately after scene has moved onscreen:
 function scene:enterScene( event )
 	local group = self.view
-    game:mapCreate()
+    mapURL = "Assets/map.jpg"
+    game:mapCreate(mapURL)
     gameTimer = timer.performWithDelay(100, game, 0)
 
     local function handlePledge( event )
@@ -55,7 +53,7 @@ function scene:enterScene( event )
         x = 86,
         y = 940,
         defaultFile = "Assets/pledge_button.png",
-        overFile = "Assets/pledge_button.png",
+        overFile = "Assets/pledge_button_hover.png",
         onEvent = handlePledge
     }
     local function handleBottleTower( event )
@@ -101,7 +99,7 @@ function scene:enterScene( event )
         x = 215,
         y = 940,
         defaultFile = "Assets/thrower_button.png",
-        overFile = "Assets/thrower_button.png",
+        overFile = "Assets/thrower_button_hover.png",
         onEvent = handleBottleTower
     }
     local function handleBasketBallTower( event )
@@ -114,7 +112,7 @@ function scene:enterScene( event )
         x = 86,
         y = 1073,
         defaultFile = "Assets/baller_button.png",
-        overFile = "Assets/baller_button.png",
+        overFile = "Assets/baller_button_hover.png",
         onEvent = handleBasketBallTower
     }
     local function handleFootBallTower( event )
@@ -127,7 +125,7 @@ function scene:enterScene( event )
         x = 215,
         y = 1073,
         defaultFile = "Assets/football_button.png",
-        overFile = "Assets/football_button.png",
+        overFile = "Assets/football_button_hover.png",
         onEvent = handleFootBallTower
     }
     -- Function to handle button events

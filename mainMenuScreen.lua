@@ -66,8 +66,8 @@ function scene:enterScene( event )
 	--One player button event handler
 	local function handle1PlayerPress( event )
 	    if ( "ended" == event.phase ) then
-	        --storyboard.gotoScene( "gameBoardScreen" )
-	        storyboard.gotoScene( "MultiGameScreen" )
+	        storyboard.gotoScene( "gameBoardScreen" )
+	        --storyboard.gotoScene( "MultiGameScreen" )
 	    end
 	end
 	onePlayerButton = widget.newButton

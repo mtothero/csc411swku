@@ -1,7 +1,6 @@
 local storyboard = require( "storyboard" )
 local scene = storyboard.newScene()
 local widget = require( "widget" )
-local multiHandler = require( "multiHandler" )
 
 local backButton, background, settingsButton, onePlayerButton, twoPlayerButton, highScoreButton, createButton, tableView
 local customFont
@@ -287,7 +286,7 @@ addPlayer = function(event)
                 {       
                     params = { var1 = "nothing", var2 = server, var3 = clients, var4 = numPlayers}        
                 }       
-                storyboard.gotoScene( "testScreen", options ) 
+                storyboard.gotoScene( "MultiGameScreen", options ) 
             elseif i == 1 then
                 client:disconnect()
                 client = nil
@@ -311,7 +310,7 @@ function connectedToServer(event)
     {       
         params = { var1 = client, var2 = "nothing", var3 = "clients", var4 = numPlayers}        
     }       
-    storyboard.gotoScene( "testScreen", options ) 
+    storyboard.gotoScene( "MultiGameScreen", options ) 
 end
 
 scene:addEventListener( "createScene", scene )

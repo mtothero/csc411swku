@@ -96,8 +96,6 @@ local function bottleThrower( event )
      if "ended" == event.phase then 
         towerChoosen = true
         damage = 100
-        print("HELLO")
-         print(towerChoosen)
       end
  end
 
@@ -117,7 +115,6 @@ function game.new() 	--constructor
     towerTable = {}
     towerChoosen = false
     towerName = nil
-    --MinionGraphic = display.newImage("Assets/bottleThrower.png")
     repPoints  = 100
     round = 1
     score = 0
@@ -144,13 +141,8 @@ function touchScreen(event)
                     if(deductRep(spawnTable[towerName][3])) then
                         local towerID = target.towerID
                         table.insert(towerTable, Tower.new(target.x + 75, target.y + 35, spawnTable[towerName])) 
-       		   --local tower= display.newImage("Assets/bottleThrower.png")
-                --tower.x = target.x + 75
-                --tower.y = target.y + 35
-                --towers:insert( tower )
                         target.towerOn = true
-                        towerChoosen = false
-                --target.damage = damage   
+                        towerChoosen = false 
                     end
                 end
             end
@@ -158,23 +150,19 @@ function touchScreen(event)
     end
 end
 
-function game:mapCreate()
+function game:mapCreate(mapURL)
 	local i 
-	for i = 1, #map do
-               
+	for i = 1, #map do   
         local placementAllowed = false
         local groundImage
         local xPos , yPos
-        
 
         --Sort out placeable areas etc...
         if map[i] == 0 then
-            groundImage = "images/grass.png" 
+            -- groundImage = "images/grass.png" 
         elseif (map[i] == 1 or map[i] == 2)then
-            groundImage = "images/floor.png" 
+            -- groundImage = "images/floor.png" 
             placementAllowed = true
-        --elseif map[i] == 2 then 
-        --    groundImage = "images/water.png"
         end
 
         if     i <= NumberOfColumns then xPos = 50+(100*(i-1));  yPos = 20
@@ -192,7 +180,6 @@ function game:mapCreate()
         end
         if(i > 20) then
             levelRects[i] = display.newRect(xPos,yPos,100, 100) 
-            --levelRects[i].x = xPos; levelRects[i].y = yPos
             levelGroup:insert(levelRects[i])
         
             if placementAllowed == true then 
@@ -203,14 +190,10 @@ function game:mapCreate()
         end
     end
 
-    tempImage = display.newImage("Assets/map.jpg", display.contentWidth/2 - 70, display.contentHeight/2 - 20)
+    tempImage = display.newImage(mapURL, display.contentWidth/2 - 70, display.contentHeight/2 - 20)
     levelGroup:insert(tempImage)
-    --tempImage = display.newImage("Assets/buildings.png", display.contentWidth/2 - 70 , display.contentHeight/2 - 20)
-    --levelImage:insert(tempImage)
-    --levelGroup:insert(levelImage)
-
-levelGroup.x = 75
-levelGroup.y = 35
+    levelGroup.x = 75
+    levelGroup.y = 35
 end
 
 function game:getmap()
@@ -220,7 +203,6 @@ function game:getmap()
     gameMap:insert(healthText)
     gameMap:insert(scoreText)
     gameMap:insert(roundText)
-   -- gameMap:insert(levelImage)
     return gameMap
 end
 
@@ -248,10 +230,6 @@ function game:addMinions()
     for i = 1, 10 do 
         local enemy = Minion.new(spawnX, spawnY, i*5 + timeBetweenRounds, spawnTable[spawners[i + (10*(round - 1))]])
         local image_name = enemy:getImage()
-    --    local image_outline = graphics.newOutline( 2, image_name )
-    --    local image_star = display.newImageRect( image_name )
-    --    physics.addBody( image_star, { outline=image_outline } )
-    --    image_star.myName = "enemy"
         table.insert(minionTable, enemy)
     end
     --MinionGraphic.x = spawnX
@@ -282,7 +260,6 @@ function game:play()
         	timeUNRText.text = "Next Round Starts in " .. timeUNRSeconds .. " seconds." 
     	end 
         local removeNum = {}
-        --print("MOVING MINIONS")
         for i = 1, #minionTable do 
             mapRectsRow =  ((minionTable[i]:getY() / 100)-1) --* NumberOfColumns)-- + ((minionTable[1]:getX() + 50)/100 - ((((minionTable[1]:getY() / 100)) * NumberOfColumns))) 
             mapRectsRow = mapRectsRow - mapRectsRow%1
@@ -292,7 +269,6 @@ function game:play()
             if(map[mapRectsNum] == 3)then
                 minionTable[i]:move(1)
             elseif(map[mapRectsNum] == 4) then
-                print("HELLO")
                 table.insert(removeNum, i)
                 minionTable[i]:kill()
                 health = health - minionTable[i]:getDamage()
@@ -308,7 +284,6 @@ function game:play()
          end
         --Remove minion at end and decrement health
         for i = #removeNum, 1, -1  do  
-            print("MINION REMOVED")
             tempMinion = table.remove(minionTable, removeNum[i])
             tempMinion = nil
         end
@@ -319,11 +294,8 @@ function game:play()
             for j = 1, #towerTable do
                 local isHit = game:checkHit(towerTable[j], minionTable[i])
                 if(isHit == 1) then
-                    --print("HIT")
-                    --game:shoot(minionTable[i],towerTable[j])
                     local minionKilled = towerTable[j]:attack(minionTable[i], self)
                     if(minionKilled == 1) then 
-                        print("KILLED MINION")
                         minionTable[i]:kill()
                         table.insert(removeNum, i)
                         break 
@@ -339,7 +311,6 @@ function game:play()
         --if a minion died, remove from table and add bounty
         for i = #removeNum, 1, -1  do  
             minionTemp = table.remove(minionTable, removeNum[i])
-           -- print(minionTemp:getBounty())
             addRep(minionTemp:getBounty())
         end 
         
@@ -363,14 +334,10 @@ end
 
 function game:finishGame()
     if(health <= 0 ) then 
-        --repText.text = "YOU LOSE \nREP POINTS:"..repPoints
         endGameScreen("loseScreen", score)
     else
         endGameScreen("winScreen", score)
-        --repText.text = "YOU WIN \nREP POINTS: "..repPoints 
     end 
-    --repText.y = repText.y + 150
-    --repText.x = repText.x + 50
 end 
 
 function game:minionWipe()
@@ -422,27 +389,18 @@ function game:removeUNR()
 end 
 
 function onCollision(event)
-    print("Collion Detected")
-    if(--event.object1.myName=="minion" and
-         event.object2.myName=="bullet") then    
+
+    if(event.object2.myName=="bullet") then    
         event.object2.isVisible = false
         event.object2:removeSelf()
         event.object2.myName=nil
-        print("Was object2!")
-        print(event.object1.myName)
     end
-    if(event.object1.myName=="bullet"
-        -- and event.object2.myName=="minion"
-        )then
+
+    if(event.object1.myName=="bullet")then
         event.object1.isVisible = false
         event.object1:removeSelf()
-        event.object1.myName=nil
-
-        print("Was object1!")
-        print(event.object2.myName)
-    
+        event.object1.myName=nil    
     end
-
 end
 
 Runtime:addEventListener("collision" , onCollision)
