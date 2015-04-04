@@ -159,6 +159,7 @@ function scene:exitScene( event )
         oldMan2Minion:removeSelf( )
         teacherMinion:removeSelf( )
         teacher2Minion:removeSelf( )
+        client:disconnect( )
     end
 
     isClient = nil

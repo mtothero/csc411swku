@@ -177,6 +177,13 @@ function scene:enterScene( event )
             Runtime:removeEventListener("autolanPlayerJoined", addPlayer)
             Runtime:removeEventListener("autolanServerFound", createListItem)
             Runtime:removeEventListener("autolanConnected", connectedToServer)
+            if(isServer) then
+                server:disconnect( )
+                server:stop()
+            end
+            if(isClient) then
+                client:disconnect( )
+            end
             storyboard.hideOverlay( "fade", 200 )
         end
     end
