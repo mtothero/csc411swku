@@ -300,7 +300,7 @@ addPlayer = function(event)
                 }       
                 storyboard.gotoScene( "MultiGameScreen", options ) 
                 for i=1, numPlayers 
-                    do clients[i]:send(sendCommand("START",true)) 
+                    do clients[i]:sendPriority({1,1})
                 end
             elseif i == 1 then
                 client:disconnect()

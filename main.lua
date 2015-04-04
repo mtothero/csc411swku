@@ -32,18 +32,6 @@ local function autolanDisconnected(event)
 end
 Runtime:addEventListener("autolanDisconnected", autolanDisconnected)
 
-local function autolanReceived(event)
-	print("message = ", event.message) --this is the message we recieved from the server
-	print("autolanClientReceived")
-end
-Runtime:addEventListener("autolanReceived", autolanReceived)
-
-local function autolanFileReceived(event)
-	print("filename = ", event.filename) --this is the filename in the system.documents directory
-	print("autolanFileReceived")
-end
-Runtime:addEventListener("autolanFileReceived", autolanFileReceived)
-
 local function autolanConnectionFailed(event)
 	print("serverIP = ", event.serverIP) --this indicates that the server went offline between discovery and connection. the serverIP is returned so you can remove it form your list
 	print("autolanConnectionFailed")
@@ -65,16 +53,3 @@ local function autolanPlayerDropped(event)
 	print("autolanPlayerDropped")
 end
 Runtime:addEventListener("autolanPlayerDropped", autolanPlayerDropped)
-
-local function autolanReceived(event)
-	print("broadcast", event.client) --this is the object representing the connection. This is the same object given during the playerJoined event and you can use this to find out which client this is coming from
-	print("message," ,event.message) --this is the message from the client. You must use event.client to find out who it came from.
-	print("autolanServerReceived")
-end
-Runtime:addEventListener("autolanReceived", autolanReceived)
-
-local function autolanFileReceived(event)
-	print("filename = ", event.filename) --this is the filename in the system.documents directory
-	print("autolanFileReceived")
-end
-Runtime:addEventListener("autolanFileReceived", autolanFileReceived)

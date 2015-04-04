@@ -367,8 +367,13 @@ clientReceived = function(event)
     print("client received")
     local message = event.message
     print("message", message, message[1], message[2])
-    if(message[1]) then
-        timer.resume(gameTimer)
+
+    --figure out packet type
+    if(message[1] == 1) then
+        print("got init packet")
+        if(message[2] == 1) then --we are the first player to join, let us take control of the ball
+            timer.resume(gameTimer)  
+        end
     end
 end
 
