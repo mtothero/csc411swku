@@ -35,11 +35,13 @@ function scene:createScene( event )
         if ( client == "nothing" ) then
             isClient = false
             isServer = true
+            Runtime:addEventListener("autolanReceived", serverReceived);
         end
 
         if ( server == "nothing" ) then
            isServer = false
            isClient = true
+           Runtime:addEventListener("autolanReceived", clientReceived);
         end
     end
 
@@ -72,7 +74,11 @@ function scene:enterScene( event )
 
     game:mapCreate(mapURL)
     gameTimer = timer.performWithDelay(100, game, 0)
- 
+    
+    if(isClient) then
+        timer.pause(gameTimer)
+    end
+
     local function handlePlay(event)
         if("ended" == event.phase) then
             timer.resume(gameTimer)
@@ -169,6 +175,8 @@ function scene:exitScene( event )
     client = nil
     server = nil
     
+    Runtime:removeEventListener("autolanReceived", clientReceived);
+    Runtime:removeEventListener("autolanReceived", serverReceived);
     Runtime:removeEventListener( "handleBackPress", onUpdate )
     Runtime:removeEventListener( "key", onKeyEvent )
 end
@@ -352,6 +360,21 @@ function createClientGUI()
         overFile = "Assets/teacher2ButtonPressed.png",
         onEvent = handleTeacher2Minion
     } 
+end
+
+-- CLIENT RETRIEVAL CODE
+clientReceived = function(event)
+    print("client received")
+    local message = event.message
+    print("message", message, message[1], message[2])
+    if(message[1]) then
+        timer.resume(gameTimer)
+    end
+end
+
+-- SERVER RETRIEVAL CODE
+serverReceived = function(event)
+    print("server received")
 end
 
 

@@ -299,6 +299,9 @@ addPlayer = function(event)
                     params = { var1 = "nothing", var2 = server, var3 = clients, var4 = numPlayers}        
                 }       
                 storyboard.gotoScene( "MultiGameScreen", options ) 
+                for i=1, numPlayers 
+                    do clients[i]:send(sendCommand("START",true)) 
+                end
             elseif i == 1 then
                 client:disconnect()
                 client = nil
@@ -323,6 +326,13 @@ function connectedToServer(event)
         params = { var1 = client, var2 = "nothing", var3 = "clients", var4 = numPlayers}        
     }       
     storyboard.gotoScene( "MultiGameScreen", options ) 
+end
+
+function sendCommand(key,value) 
+    local command = {} 
+    command[1] = key 
+    command[2] = value
+    return state
 end
 
 scene:addEventListener( "createScene", scene )
