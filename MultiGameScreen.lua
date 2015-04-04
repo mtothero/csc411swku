@@ -6,7 +6,8 @@ local game = game.new()
 local map = display.newGroup()
 map = game.getmap()
 
-local backButton, isServer, isClient, mapURL
+local isServer, isClient, mapURL
+local client, server, clients, numPlayers
 
 function endGameScreen(scene, score)
     local options =
@@ -145,6 +146,8 @@ function scene:exitScene( event )
         bottleThrower:removeSelf( )
         basketballTower:removeSelf( )
         footballTower:removeSelf( )
+        server:disconnect( )
+        server:stop()
     end
 
     if(isClient) then
@@ -157,9 +160,14 @@ function scene:exitScene( event )
         teacherMinion:removeSelf( )
         teacher2Minion:removeSelf( )
     end
+
     isClient = nil
     isServer = nil
-
+    numPlayers = nil
+    clients = nil
+    client = nil
+    server = nil
+    
     Runtime:removeEventListener( "handleBackPress", onUpdate )
     Runtime:removeEventListener( "key", onKeyEvent )
 end

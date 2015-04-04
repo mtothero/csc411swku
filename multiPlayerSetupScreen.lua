@@ -203,6 +203,11 @@ end
 -- Called when scene is about to move offscreen:
 function scene:exitScene( event )
     local group = self.view
+    Runtime:removeEventListener("autolanConnectionFailed", connectionAttemptFailed)
+    Runtime:removeEventListener("autolanDisconnected", connectionAttemptFailed)
+    Runtime:removeEventListener("autolanPlayerJoined", addPlayer)
+    Runtime:removeEventListener("autolanServerFound", createListItem)
+    Runtime:removeEventListener("autolanConnected", connectedToServer)
     Runtime:removeEventListener( "handleCreatePress", onEvent )
     Runtime:removeEventListener( "handleFindPress", onEvent )
     Runtime:removeEventListener( "handleBackPress", onEvent )
