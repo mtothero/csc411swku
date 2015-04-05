@@ -155,11 +155,8 @@ function game.addTower(event)
     return false
 end
 
-function game.addTowerClient(myTower)
-    
+function game.addTowerClient(myTower)   
     table.insert(towerTable,Tower.new(myTower.x, myTower.y, spawnTable[myTower.towerString]))
-    print(myTower)
-
 end
 
 function game:getCommand()
@@ -221,6 +218,15 @@ function game:getmap()
     gameMap:insert(roundText)
     return gameMap
 end
+
+function game.spawnSingleEnemy(spawnNumber)
+{
+    local spawnX, spawnY
+    spawnX = 50
+    spawnY = 20
+    local enemy = Minion.new(spawnX, spawnY, 5, spawnTable[spawnNumber])
+    table.insert(minionTable, enemy)
+}
 
 function game:addMinions()
     local spawnX, spawnY

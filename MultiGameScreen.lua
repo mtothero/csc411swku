@@ -279,7 +279,8 @@ function createClientGUI()
 
     local function handleHighschoolerMinion( event )
         if("ended" == event.phase ) then
-            
+            game.spawnSingleEnemy(1)
+            client.send({2,1})
         end 
     end
     highschoolerMinion = widget.newButton
@@ -394,6 +395,9 @@ end
 -- SERVER RETRIEVAL CODE
 serverReceived = function(event)
     print("server received")
+    if(message[1] = 2) then
+        game.spawnSingleEnemy(message[2])
+    end
 end
 
 
