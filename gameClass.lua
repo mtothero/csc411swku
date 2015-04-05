@@ -220,13 +220,12 @@ function game:getmap()
 end
 
 function game.spawnSingleEnemy(spawnNumber)
-{
     local spawnX, spawnY
     spawnX = 50
     spawnY = 20
     local enemy = Minion.new(spawnX, spawnY, 5, spawnTable[spawnNumber])
     table.insert(minionTable, enemy)
-}
+end
 
 function game:addMinions()
     local spawnX, spawnY
