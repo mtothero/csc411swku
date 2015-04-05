@@ -395,7 +395,7 @@ end
 -- SERVER RETRIEVAL CODE
 serverReceived = function(event)
     print("server received")
-    if(message[1] = 2) then
+    if(message[1] == 2) then
         game.spawnSingleEnemy(message[2])
     end
 end
