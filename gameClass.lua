@@ -142,17 +142,23 @@ function game.addTower(event)
                 if target.towerOn == false then
                     if(deductRep(spawnTable[towerName][3])) then
                         local towerID = target.towerID
-                        table.insert(towerTable, Tower.new(target.x + 75, target.y + 35, spawnTable[towerName]))
-                        commandString = "This is a tower"
+                        tempTower = Tower.new(target.x + 75, target.y + 35, spawnTable[towerName])
+                        table.insert(towerTable, tempTower)
                         target.towerOn = true
                         towerChoosen = false 
-                        return true
+                        return tempTower
                     end
                 end
             end
         end
     end
     return false
+end
+
+function game.addTowerClient(myTower)
+    
+    table.insert(towerTable,myTower)
+    
 end
 
 function game:getCommand()

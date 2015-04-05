@@ -367,7 +367,7 @@ function touchScreen(event)
         sendTower = game.addTower(event)
         if(sendTower) then
             for i=1, numPlayers 
-               do clients[i]:send({2,event})
+               do clients[i]:send({2,sendTower})
             end
         end
     end
@@ -386,7 +386,8 @@ clientReceived = function(event)
             timer.resume(gameTimer)  
         end
     elseif(message[1] == 2) then
-        game:addTower(message[2])
+        game.addTowerClient(message[2])
+        print("INSIDE IF")
     end
 end
 
