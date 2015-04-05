@@ -157,8 +157,9 @@ end
 
 function game.addTowerClient(myTower)
     
-    table.insert(towerTable,myTower)
-    
+    table.insert(towerTable,Tower.new(myTower.x, myTower.y, spawnTable[myTower.towerString]))
+    print(myTower)
+
 end
 
 function game:getCommand()
