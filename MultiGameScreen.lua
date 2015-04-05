@@ -251,7 +251,8 @@ end
 function createClientGUI() 
     local function handleCopMinion( event )
         if("ended" == event.phase ) then
-            
+            game.spawnSingleEnemy(5)
+            client:send({2,5})
         end 
     end
     copMinion = widget.newButton
@@ -265,7 +266,8 @@ function createClientGUI()
 
     local function handleCop2Minion( event )
         if("ended" == event.phase ) then
-            
+            game.spawnSingleEnemy(6)
+            client:send({2,6})
         end 
     end
     cop2Minion = widget.newButton
@@ -294,7 +296,8 @@ function createClientGUI()
 
     local function handleHighschooler2Minion( event )
         if("ended" == event.phase ) then
-            
+            game.spawnSingleEnemy(2)
+            client:send({2,2})
         end 
     end
     highschooler2Minion = widget.newButton
@@ -308,7 +311,8 @@ function createClientGUI()
 
     local function handleOldManMinion( event )
         if("ended" == event.phase ) then
-            
+            game.spawnSingleEnemy(3)
+            client:send({2,3})
         end 
     end
     oldManMinion = widget.newButton
@@ -322,7 +326,8 @@ function createClientGUI()
 
     local function handleOldMan2Minion( event )
         if("ended" == event.phase ) then
-            
+            game.spawnSingleEnemy(7)
+            client:send({2,7})
         end 
     end
     oldMan2Minion = widget.newButton
@@ -336,7 +341,8 @@ function createClientGUI()
 
     local function handleTeacherMinion( event )
         if("ended" == event.phase ) then
-            
+            game.spawnSingleEnemy(4)
+            client:send({2,4})
         end 
     end
     teacherMinion = widget.newButton
@@ -350,7 +356,8 @@ function createClientGUI()
 
     local function handleTeacher2Minion( event )
         if("ended" == event.phase ) then
-            
+            game.spawnSingleEnemy(8)
+            client:send({2,8})
         end 
     end
     teacher2Minion = widget.newButton

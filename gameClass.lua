@@ -20,6 +20,8 @@ local spawnTable =
     [4] = {100, 10, 40, 20, "teacher"},
     [5] = {2000, 20, 25, 40, "cop"},
     [6] = {3000, 25, 25, 90, "cop2"},
+    [7] = {1700, 10, 15, 25, "oldMan2"}
+    [8] = {200, 10, 40, 20, "teacher2"}
     ['pledge'] = {75, 2, 50, 175, 'pledge'},
     ['bottleThrower'] = {100, 4, 150, 400, 'bottleThrower'},
     ['baller'] = {150, 4, 250, 500, 'Baller'},
@@ -221,8 +223,6 @@ end
 
 function game.spawnSingleEnemy(spawnNumber)
     local spawnX, spawnY
-    spawnX = 50
-    spawnY = 20
     local enemy = Minion.new(spawnX, spawnY, 5, spawnTable[spawnNumber])
     table.insert(minionTable, enemy)
 end
@@ -252,6 +252,8 @@ function game:addMinions()
         local enemy = Minion.new(spawnX, spawnY, i*5 + timeBetweenRounds, spawnTable[spawners[i + (10*(round - 1))]])
         local image_name = enemy:getImage()
         table.insert(minionTable, enemy)
+        print(spawnY)
+        print(spawnX)
     end
     --MinionGraphic.x = spawnX
     --MinionGraphic.y = spawnY
