@@ -2,7 +2,7 @@ local storyboard = require( "storyboard" )
 local scene = storyboard.newScene()
 local widget = require( "widget" )
 local game = require("gameClass")
-local game = game.new()
+local game = game.new(false)
 local map = display.newGroup()
 map = game.getmap()
 
@@ -177,6 +177,12 @@ end
 -- Called prior to the removal of scene's "view" (display group)
 function scene:destroyScene( event )
 	local group = self.view
+end
+
+--Checks if they want to add a tower
+--Needed due to multiplayer
+function touchScreen(event)
+    game.addTower(event)
 end
 
 ---------------------------------------------------------------------------------

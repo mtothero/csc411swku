@@ -2,7 +2,7 @@ local storyboard = require( "storyboard" )
 local scene = storyboard.newScene()
 local widget = require( "widget" )
 local game = require("gameClass")
-local game = game.new()
+local game = game.new(true)
 local map = display.newGroup()
 map = game.getmap()
 
@@ -370,6 +370,9 @@ function createClientGUI()
     } 
 end
 
+--Checks if screen is tapped
+--to add a tower. Also sends the tower
+--to the client to sync the game
 function touchScreen(event)
     if(isServer) then
         sendTower = game.addTower(event)
