@@ -362,6 +362,17 @@ function createClientGUI()
     } 
 end
 
+function touchScreen(event)
+    if(isServer) then
+        sendTower = game.addTower(event)
+        if(sendTower) then
+            for i=1, numPlayers 
+               do clients[i]:send({2,event})
+            end
+        end
+    end
+end
+
 -- CLIENT RETRIEVAL CODE
 clientReceived = function(event)
     print("client received")
@@ -374,6 +385,8 @@ clientReceived = function(event)
         if(message[2] == 1) then --we are the first player to join, let us take control of the ball
             timer.resume(gameTimer)  
         end
+    elseif(message[1] == 2) then
+        game:addTower(message[2])
     end
 end
 

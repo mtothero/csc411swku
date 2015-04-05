@@ -6,6 +6,7 @@ local Tower = require("Tower")
 local physics = require("physics")
 physics.start()
 physics.setGravity( 0,0)
+local commandString, needsInput
 
 
 ------------------------------------------------------
@@ -132,7 +133,8 @@ function game.new() 	--constructor
 end
 
 
-function touchScreen(event)
+--function touchScreen(event)
+function game.addTower(event)
     if(endGame == false)then 
         if event.phase == "ended" then
             if towerChoosen == true then
@@ -140,14 +142,21 @@ function touchScreen(event)
                 if target.towerOn == false then
                     if(deductRep(spawnTable[towerName][3])) then
                         local towerID = target.towerID
-                        table.insert(towerTable, Tower.new(target.x + 75, target.y + 35, spawnTable[towerName])) 
+                        table.insert(towerTable, Tower.new(target.x + 75, target.y + 35, spawnTable[towerName]))
+                        commandString = "This is a tower"
                         target.towerOn = true
                         towerChoosen = false 
+                        return true
                     end
                 end
             end
         end
     end
+    return false
+end
+
+function game:getCommand()
+    return commandString
 end
 
 function game:mapCreate(mapURL)

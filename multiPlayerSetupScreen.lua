@@ -323,7 +323,7 @@ function connectedToServer(event)
     print("connected, waiting for sync")
     local options =         
     {       
-        params = { var1 = client, var2 = "nothing", var3 = "clients", var4 = numPlayers}        
+        params = { var1 = client, var2 = "nothing", var3 = "mothing", var4 = numPlayers}        
     }       
     storyboard.gotoScene( "MultiGameScreen", options ) 
 end
