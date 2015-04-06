@@ -7,17 +7,36 @@ local map = display.newGroup()
 map = game.getmap()
 
 local isServer, isClient, mapURL
-local client, server, clients, numPlayers
+local client, server, clients, numPlayers, serverStatus, score
 
 function endGameScreen(scene, score)
-    local options =
-    {
-        params =
-        {
-            score = score,
-        }
-    }
-    storyboard.gotoScene(scene, options)
+    if(isServer) then
+        if(scene == "loseScreen") then
+            print("sending lose message")
+            for i=1, numPlayers 
+               do clients[i]:send({5,1,score})
+            end
+        elseif(scene == "winScreen") then
+            print("sending win message")
+            for i=1, numPlayers 
+               do clients[i]:send({5,2,score})
+            end
+        end
+
+        listener = {}
+        function listener:timer( event )
+            print("we out")
+            local options =
+            {
+                params =
+                {
+                    score = score,
+                }
+            }
+            storyboard.gotoScene(scene, options)
+        end
+        timer.performWithDelay( 5000, listener )
+    end
 end
 
 -- Called when the scene's view does not exist:
@@ -41,6 +60,7 @@ function scene:createScene( event )
         if ( server == "nothing" ) then
            isServer = false
            isClient = true
+           serverStatus = "nothing"
            Runtime:addEventListener("autolanReceived", clientReceived);
         end
     end
@@ -392,13 +412,53 @@ clientReceived = function(event)
 
     --figure out packet type
     if(message[1] == 1) then
-        print("got init packet")
         if(message[2] == 1) then --we are the first player to join, let us take control of the ball
             timer.resume(gameTimer)  
         end
     elseif(message[1] == 2) then
         game.addTowerClient(message[2])
-        print("INSIDE IF")
+    end
+
+    if(message[1] == 5) then
+        if(message[2] == 1) then
+            serverStatus = "serverLost"
+            score = message[3]
+        elseif(message[2] == 2) then
+            serverStatus = "serverWon"
+            score = message[3]
+        end
+
+        endlistener = {}
+        function endlistener:timer( event )
+            print("we are closing")
+            if(serverStatus == "serverWon") then
+                scene = "loseScreen"
+                sceneImage = "lost"
+                local options =
+                {
+                    params =
+                    {
+                        score = score,
+                        sceneImage = sceneImage,
+                    }
+                }
+                storyboard.gotoScene(scene, options)
+            elseif(serverStatus == "serverLost") then
+                scene = "winScreen"
+                sceneImage = "win"
+                local options =
+                {
+                params =
+                    {
+                        score = score,
+                        sceneImage = sceneImage,
+                    }
+                }
+                storyboard.gotoScene(scene, options)
+            end
+        end
+        print("we're about to close")
+        timer.performWithDelay( 5000, endlistener )
     end
 end
 
@@ -409,6 +469,35 @@ serverReceived = function(event)
     print(message)
     if(message[1] == 2) then
         game.spawnSingleEnemy(message[2])
+    end
+end
+
+local function endlistener( event )
+    print("we got here")
+    if(serverStatus == "serverWon") then
+        scene = "loseScreen"
+        sceneImage = "lost"
+        local options =
+        {
+            params =
+            {
+                score = score,
+                sceneImage = sceneImage,
+            }
+        }
+        storyboard.gotoScene(scene, options)
+    elseif(serverStatus == "serverLost") then
+        scene = "winScreen"
+        sceneImage = "win"
+        local options =
+        {
+        params =
+            {
+                score = score,
+                sceneImage = sceneImage,
+            }
+        }
+        storyboard.gotoScene(scene, options)
     end
 end
 

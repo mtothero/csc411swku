@@ -8,8 +8,15 @@ function scene:createScene( event )
 	local group = self.view
 	local score = event.params.score
 
+	if (event.params.sceneImage ~= nil) then
+		if (event.params.sceneImage == "lost") then
+			background = display.newImage("Assets/serverLoseScreen.png") 
+		end
+	else
+		background = display.newImage("Assets/you_lose.jpg") 
+	end
+	
 	--background image
-	background = display.newImage("Assets/you_lose.jpg") 
     background.x = display.contentWidth/2
     background.y = display.contentHeight/2   
     group:insert(background)

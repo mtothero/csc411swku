@@ -8,8 +8,15 @@ function scene:createScene( event )
 	local group = self.view
 	local score = event.params.score
 
+	if (event.params.sceneImage ~= nil) then
+		if (event.params.sceneImage == "win") then
+			background = display.newImage("Assets/serverWinScreen.png") 
+		end
+	else
+		background = display.newImage("Assets/you_win.jpg") 
+	end
+
 	--background image
-	background = display.newImage("Assets/you_win.jpg") 
     background.x = display.contentWidth/2
     background.y = display.contentHeight/2   
     group:insert(background)
