@@ -12,20 +12,17 @@ local client, server, clients, numPlayers, serverStatus, score
 function endGameScreen(scene, score)
     if(isServer) then
         if(scene == "loseScreen") then
-            print("sending lose message")
             for i=1, numPlayers 
-               do clients[i]:send({5,1,score})
+               do clients[i]:sendPriority({5,1,score})
             end
         elseif(scene == "winScreen") then
-            print("sending win message")
             for i=1, numPlayers 
-               do clients[i]:send({5,2,score})
+               do clients[i]:sendPriority({5,2,score})
             end
         end
 
         listener = {}
         function listener:timer( event )
-            print("we out")
             local options =
             {
                 params =
@@ -35,7 +32,7 @@ function endGameScreen(scene, score)
             }
             storyboard.gotoScene(scene, options)
         end
-        timer.performWithDelay( 5000, listener )
+        timer.performWithDelay( 1000, listener )
     end
 end
 
@@ -272,7 +269,7 @@ function createClientGUI()
     local function handleCopMinion( event )
         if("ended" == event.phase ) then
             game.spawnSingleEnemy(5)
-            client:send({2,5})
+            client:sendPriority({2,5})
         end 
     end
     copMinion = widget.newButton
@@ -287,7 +284,7 @@ function createClientGUI()
     local function handleCop2Minion( event )
         if("ended" == event.phase ) then
             game.spawnSingleEnemy(6)
-            client:send({2,6})
+            client:sendPriority({2,6})
         end 
     end
     cop2Minion = widget.newButton
@@ -302,7 +299,7 @@ function createClientGUI()
     local function handleHighschoolerMinion( event )
         if("ended" == event.phase ) then
             game.spawnSingleEnemy(1)
-            client:send({2,1})
+            client:sendPriority({2,1})
         end 
     end
     highschoolerMinion = widget.newButton
@@ -317,7 +314,7 @@ function createClientGUI()
     local function handleHighschooler2Minion( event )
         if("ended" == event.phase ) then
             game.spawnSingleEnemy(2)
-            client:send({2,2})
+            client:sendPriority({2,2})
         end 
     end
     highschooler2Minion = widget.newButton
@@ -332,7 +329,7 @@ function createClientGUI()
     local function handleOldManMinion( event )
         if("ended" == event.phase ) then
             game.spawnSingleEnemy(3)
-            client:send({2,3})
+            client:sendPriority({2,3})
         end 
     end
     oldManMinion = widget.newButton
@@ -347,7 +344,7 @@ function createClientGUI()
     local function handleOldMan2Minion( event )
         if("ended" == event.phase ) then
             game.spawnSingleEnemy(7)
-            client:send({2,7})
+            client:sendPriority({2,7})
         end 
     end
     oldMan2Minion = widget.newButton
@@ -362,7 +359,7 @@ function createClientGUI()
     local function handleTeacherMinion( event )
         if("ended" == event.phase ) then
             game.spawnSingleEnemy(4)
-            client:send({2,4})
+            client:sendPriority({2,4})
         end 
     end
     teacherMinion = widget.newButton
@@ -377,7 +374,7 @@ function createClientGUI()
     local function handleTeacher2Minion( event )
         if("ended" == event.phase ) then
             game.spawnSingleEnemy(8)
-            client:send({2,8})
+            client:sendPriority({2,8})
         end 
     end
     teacher2Minion = widget.newButton
@@ -398,7 +395,7 @@ function touchScreen(event)
         sendTower = game.addTower(event)
         if(sendTower) then
             for i=1, numPlayers 
-               do clients[i]:send({2,sendTower})
+               do clients[i]:sendPriority({2,sendTower})
             end
         end
     end
@@ -430,35 +427,25 @@ clientReceived = function(event)
 
         endlistener = {}
         function endlistener:timer( event )
-            print("we are closing")
             if(serverStatus == "serverWon") then
                 scene = "loseScreen"
                 sceneImage = "lost"
-                local options =
-                {
-                    params =
-                    {
-                        score = score,
-                        sceneImage = sceneImage,
-                    }
-                }
-                storyboard.gotoScene(scene, options)
             elseif(serverStatus == "serverLost") then
                 scene = "winScreen"
                 sceneImage = "win"
-                local options =
-                {
-                params =
-                    {
-                        score = score,
-                        sceneImage = sceneImage,
-                    }
-                }
-                storyboard.gotoScene(scene, options)
             end
+
+            local options =
+            {
+            params =
+                {
+                    score = score,
+                    sceneImage = sceneImage,
+                }
+            }
+            storyboard.gotoScene(scene, options)
         end
-        print("we're about to close")
-        timer.performWithDelay( 5000, endlistener )
+        timer.performWithDelay( 1000, endlistener )
     end
 end
 
@@ -471,36 +458,6 @@ serverReceived = function(event)
         game.spawnSingleEnemy(message[2])
     end
 end
-
-local function endlistener( event )
-    print("we got here")
-    if(serverStatus == "serverWon") then
-        scene = "loseScreen"
-        sceneImage = "lost"
-        local options =
-        {
-            params =
-            {
-                score = score,
-                sceneImage = sceneImage,
-            }
-        }
-        storyboard.gotoScene(scene, options)
-    elseif(serverStatus == "serverLost") then
-        scene = "winScreen"
-        sceneImage = "win"
-        local options =
-        {
-        params =
-            {
-                score = score,
-                sceneImage = sceneImage,
-            }
-        }
-        storyboard.gotoScene(scene, options)
-    end
-end
-
 
 ---------------------------------------------------------------------------------
 -- END OF YOUR IMPLEMENTATION
