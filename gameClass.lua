@@ -330,7 +330,7 @@ function game:play()
                 minionTable[i]:move(1)
             elseif(map[mapRectsNum] == 4) then
                 table.insert(removeNum, i)
-                addAttackPoints(minionTable[i].getBounty())
+                addAttackPoints(minionTable[i]:getBounty())
                 minionTable[i]:kill()
                 health = health - minionTable[i]:getDamage()
                 healthText.text = health
