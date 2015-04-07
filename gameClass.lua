@@ -99,8 +99,9 @@ local function addRep(bounty)
 end
 
 local function addAttackPoints(bounty)
+    attackPoints = attackPoints + bounty
     if(isServer == false) then 
-        attackPoints = attackPoints + bounty
+       
         attackPointsText.text = attackPoints
         score = score + attackPoints + bounty 
         scoreText.text = score
@@ -134,6 +135,7 @@ function game.new(isMulti) 	--constructor
     towerName = nil
     repPoints  = 100
     attackPoints = 100
+    newAP = 0
     attackScore = 0
     round = 1
     score = 0
@@ -263,6 +265,7 @@ function game.spawnSingleEnemy(spawnNumber)
         spawnX = 50
         spawnY = 720
         local enemy = Minion.new(spawnX, spawnY, table.getn(minionTable)*5 + timeUntilNextRound, spawnTable[spawnNumber])
+        attackPoints = attackPoints - spawnTable[spawnNumber][6]
         table.insert(minionTable, enemy)
     end
 end
@@ -330,7 +333,7 @@ function game:play()
                 minionTable[i]:move(1)
             elseif(map[mapRectsNum] == 4) then
                 table.insert(removeNum, i)
-                addAttackPoints(minionTable[i]:getBounty())
+                newAP = newAP + minionTable[i]:getBounty()
                 minionTable[i]:kill()
                 health = health - minionTable[i]:getDamage()
                 healthText.text = health
@@ -387,6 +390,8 @@ function game:play()
         elseif(#minionTable == 0 and attackPoints <= 50 and round <maxRounds) then 
             round = round + 1
             roundText.text = round
+            addAttackPoints(newAP)
+            newAP = 0
             newRound = true
         elseif(#minionTable == 0 and attackPoints <= 50 and round == maxRounds) then
             endGame = true
