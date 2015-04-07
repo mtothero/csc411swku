@@ -1,3 +1,15 @@
+--[[/************************************************************/
+/* Author:  Frat Defense Team - Matt Tothero, Josh Smith,       */
+/*          Dave Clymer, Alec McCloskey                         */
+/* Creation Date: March 2014                                    */
+/* Modification Date: 4/4/2015                                  */
+/* Course: CSC354 & CSC411                                      */
+/* Professor Name: Dr. Parson & Dr. Frye                        */
+/* Filename: gameBoardScreen                                    */
+/* Purpose: This displays the game board for a single player    */
+/*          game.                                               */
+/************************************************************/--]]
+
 local storyboard = require( "storyboard" )
 local scene = storyboard.newScene()
 local widget = require( "widget" )
@@ -5,9 +17,9 @@ local game = require("gameClass")
 local game = game.new(false)
 local map = display.newGroup()
 map = game.getmap()
-
 local backButton
 
+-- called once the game ends
 function endGameScreen(scene, score)
     local options =
     {
@@ -170,6 +182,7 @@ function scene:exitScene( event )
     Runtime:removeEventListener( "key", onKeyEvent )
 end
 
+-- Called after the scene is removed
 function scene:didExitScene( event )
    storyboard.removeScene( "gameBoardScreen" )
 end

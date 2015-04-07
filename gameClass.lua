@@ -1,3 +1,15 @@
+--[[/************************************************************/
+/* Author:  Frat Defense Team - Matt Tothero, Josh Smith,       */
+/*          Dave Clymer, Alec McCloskey                         */
+/* Creation Date: March 2014                                    */
+/* Modification Date: 4/4/2015                                  */
+/* Course: CSC354 & CSC411                                      */
+/* Professor Name: Dr. Parson & Dr. Frye                        */
+/* Filename: gameClass                                          */
+/* Purpose: This class creates is the structure of a game       */
+/*          object that handles all game player.                */
+/************************************************************/--]]
+
 local game = {}
 local game_mt = {__index = game}
 local widget = require( "widget" )
@@ -6,8 +18,7 @@ local Tower = require("Tower")
 local physics = require("physics")
 physics.start()
 physics.setGravity( 0,0)
-local commandString, needsInput
-
+local commandString, needsInput, onCollision
 
 ------------------------------------------------------
 --PRIVATE FUNCTIONS
@@ -68,18 +79,6 @@ local map = {
     0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,    0,   0,   0,   0,   0,  0,  0,  0,          
 }
 
-
---local levelRects   = {}
---local levelGroup   = display.newGroup()
---local towers       = display.newGroup()
---local gameMap      = display.newGroup()
---local towerChoosen = false
---local repPoints    = 100
---local bottleThrow
---local repText = display.newText("Rep Points: "..repPoints, 500, 50, "Helvetica", 116)
-
-local onCollision
-
 local function deductRep(cost) --used to deduct rep points
     if repPoints >= cost then
         repPoints = repPoints - cost
@@ -88,6 +87,7 @@ local function deductRep(cost) --used to deduct rep points
     end 
     return false
 end 
+
 local function addRep(bounty)
     repPoints = repPoints + bounty
     repText.text = repPoints
@@ -105,7 +105,6 @@ local function bottleThrower( event )
 -----------------------------------------------------
 --PUBLIC FUNCTIONS
 -----------------------------------------------------
-
 function game.new(isMulti) 	--constructor 
 	local newGame= {}
     multiplayer = isMulti
@@ -256,12 +255,6 @@ function game:addMinions()
         local image_name = enemy:getImage()
         table.insert(minionTable, enemy)
     end
-    --MinionGraphic.x = spawnX
-    --MinionGraphic.y = spawnY
-    --table.insert(minionTable, Minion.new(spawnX, spawnY, 10))
-    --MinionGraphic.x = myMinion:getX()
-    --MinionGraphic.y = myMinion:getY()
-    --gameMap.insert(MinionGraphic)
 end
 
 function game:play()
@@ -394,7 +387,6 @@ function game:checkHit(towerCheck, minionCheck)
         return 1
     end
     return 0
-
 end 
 
 function game:towerChoosen(name)
@@ -416,7 +408,6 @@ function game:removeUNR()
 end 
 
 function onCollision(event)
-
     if(event.object2.myName=="bullet") then    
         event.object2.isVisible = false
         event.object2:removeSelf()

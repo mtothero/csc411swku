@@ -1,5 +1,6 @@
 -- Supported values for orientation:
 -- portrait, portraitUpsideDown, landscapeLeft, landscapeRight
+-- build file
 
 settings = {
 	android =

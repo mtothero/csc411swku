@@ -1,3 +1,5 @@
+-- Application specific properties
+
 application = 
 {
 	content = 

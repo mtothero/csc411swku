@@ -46,6 +46,13 @@ FratDefense Multi
 	-> volumeConfig.txt     : file used to manage audio preferences
 	-> winScreen.lua        : displays the winning screen
 
+The following are the multiplayer files that were created by us to enable 
+multiplayer:
+	- multiPlayerSetupScreen.lua
+	- MultiGameScreen.lua
+
+Most of the other files were either left alone or slightly modified. 
+
 ################################################################################
 ####                    Networking Procedures Examination                  ####     
 ####                                                                        #### 

@@ -1,3 +1,15 @@
+--[[/************************************************************/
+/* Author: 	Frat Defense Team - Matt Tothero, Josh Smith,       */
+/*			Dave Clymer, Alec McCloskey                         */
+/* Creation Date: March 2014 									*/
+/* Modification Date: 4/4/2015								    */
+/* Course: CSC354 & CSC411									    */
+/* Professor Name: Dr. Parson & Dr. Frye					    */
+/* Filename: Tower          									*/
+/* Purpose: A tower represents a defense object. The game       */
+/*			controller instantiates Tower objects				*/
+/************************************************************/--]]
+
 local Tower = {}
 local Tower_mt = {__index = Tower}
 local widget = require( "widget" )
@@ -16,7 +28,6 @@ function Tower.new(initX, initY, table)
 		towerImage = display.newImage("Assets/"..(table[5]).."/" ..(table[5]).. "_standing(" .. (initY<620 and 'F' or 'B').. ")_01.png", initX, initY),
 		dir = initY<620 and 'F' or 'B'
 	}
-	--print(newTower.damage)
 	return setmetatable(newTower, Tower_mt)
 end
 
