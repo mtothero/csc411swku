@@ -1,3 +1,18 @@
+--[[/************************************************************/
+/* Author: 	Frat Defense Team - Matt Tothero, Josh Smith,       */
+/*			Dave Clymer, Alec McCloskey                         */
+/* Creation Date: March 2014 									*/
+/* Modification Date: 4/4/2015								    */
+/* Course: CSC354 & CSC411									    */
+/* Professor Name: Dr. Parson & Dr. Frye					    */
+/* Filename: main           									*/
+/* Purpose: Every Corona application has a main file. The 		*/
+/*			purpose of the main file is to initialize starting  */
+/*			values. In this case, it creates the AutoLan network*/
+/*			listeners.											*/
+/************************************************************/--]]
+
+-- don't need the status bar
 display.setStatusBar( display.HiddenStatusBar )
 
 -- require controller module
@@ -5,7 +20,6 @@ local storyboard = require "storyboard"
 
 -- load first screen
 storyboard.gotoScene( "loadingScreen" )
-
 
 ----------------------------------------------------------------------------------------------------------
 ----------------------------Client Specific Listeners-----------------------------------------------------

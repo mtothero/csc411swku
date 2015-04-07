@@ -1,3 +1,14 @@
+--[[/************************************************************/
+/* Author: 	Frat Defense Team - Matt Tothero, Josh Smith,       */
+/*			Dave Clymer, Alec McCloskey                         */
+/* Creation Date: March 2014 									*/
+/* Modification Date: 4/4/2015								    */
+/* Course: CSC354 & CSC411									    */
+/* Professor Name: Dr. Parson & Dr. Frye					    */
+/* Filename: mainMenuScreen 									*/
+/* Purpose: This displays the main menu screen and provides	    */
+/* 			main menu functionality.							*/
+/************************************************************/--]]
 local storyboard = require( "storyboard" )
 local scene = storyboard.newScene()
 local widget = require( "widget" )
@@ -225,6 +236,7 @@ function scene:exitScene( event )
 	Runtime:removeEventListener( "handleSettingsPress", onEvent )
 end
 
+-- Called after the scene is removed
 function scene:didExitScene( event )
 	settingsButton:removeSelf()
 	settingsButton = nil

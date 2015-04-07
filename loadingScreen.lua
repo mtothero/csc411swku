@@ -1,3 +1,14 @@
+--[[/************************************************************/
+/* Author:  Frat Defense Team - Matt Tothero, Josh Smith,       */
+/*          Dave Clymer, Alec McCloskey                         */
+/* Creation Date: March 2014                                    */
+/* Modification Date: --                                        */
+/* Course: CSC354                                               */
+/* Professor Name: Dr. Parson                                   */
+/* Filename: loadingScreen                                      */
+/* Purpose: This displays the loading screen of the game.       */
+/************************************************************/--]]
+
 local storyboard = require( "storyboard" )
 local scene = storyboard.newScene()
 local widget = require( "widget" )

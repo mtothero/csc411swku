@@ -1,3 +1,15 @@
+--[[/************************************************************/
+/* Author: 	Frat Defense Team - Matt Tothero, Josh Smith,       */
+/*			Dave Clymer, Alec McCloskey                         */
+/* Creation Date: March 2014 									*/
+/* Modification Date: 4/4/2015								    */
+/* Course: CSC354 & CSC411									    */
+/* Professor Name: Dr. Parson & Dr. Frye					    */
+/* Filename: Minion          									*/
+/* Purpose: A minion represents an enemy that needs to be killed*/
+/* 			off. The game controller instantiates Minion objects*/
+/************************************************************/--]]
+
 local Minion = {}
 local Minion_mt = {__index = Minion}
 local widget = require( "widget" )

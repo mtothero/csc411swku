@@ -1,3 +1,14 @@
+--[[/************************************************************/
+/* Author: 	Frat Defense Team - Matt Tothero, Josh Smith,       */
+/*			Dave Clymer, Alec McCloskey                         */
+/* Creation Date: March 2014 									*/
+/* Modification Date: 4/4/2015								    */
+/* Course: CSC354 & CSC411									    */
+/* Professor Name: Dr. Parson & Dr. Frye					    */
+/* Filename: loseScreen     									*/
+/* Purpose: This displays the losing screen of the game.		*/
+/************************************************************/--]]
+
 local storyboard = require( "storyboard" )
 local scene = storyboard.newScene()
 local widget = require( "widget" )
