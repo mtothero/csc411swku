@@ -2,7 +2,7 @@
 /* Author:  Frat Defense Team - Matt Tothero, Josh Smith,       */
 /*          Dave Clymer, Alec McCloskey                         */
 /* Creation Date: March 2014                                    */
-/* Modification Date: 4/4/2015                                  */
+/* Modification Date: 4/7/2015                                  */
 /* Course: CSC354 & CSC411                                      */
 /* Professor Name: Dr. Parson & Dr. Frye                        */
 /* Filename: gameClass                                          */
@@ -18,7 +18,7 @@ local Tower = require("Tower")
 local physics = require("physics")
 physics.start()
 physics.setGravity( 0,0)
-local commandString, needsInput, onCollision
+local needsInput, onCollision
 
 ------------------------------------------------------
 --PRIVATE FUNCTIONS
@@ -185,10 +185,6 @@ end
 
 function game.addTowerClient(myTower)   
     table.insert(towerTable,Tower.new(myTower.x, myTower.y, spawnTable[myTower.towerString]))
-end
-
-function game:getCommand()
-    return commandString
 end
 
 function game:mapCreate(mapURL)

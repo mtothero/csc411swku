@@ -1,11 +1,26 @@
+--[[/************************************************************/
+/* Author:  Dave Clymer, Matt Tothero                           */
+/* Creation Date: March 2014                                    */
+/* Modification Date: 4/7/2015                                  */
+/* Course: CSC411                                               */
+/* Professor Name: Dr. Frye                                     */
+/* Filename: multiplayerSetup                                   */
+/* Purpose: Serves as the multiplayer lobby. Allows clients     */
+/*          to connect to servers.                              */
+/* NOTE: More inline documentation has been provided here since */
+/*       this file contains alot of networking concepts         */
+/*       that pertain to this assignment.                       */
+/************************************************************/--]]
+
 local storyboard = require( "storyboard" )
 local scene = storyboard.newScene()
 local widget = require( "widget" )
 
-local backButton, background, settingsButton, onePlayerButton, twoPlayerButton, highScoreButton, createButton, tableView
+local backButton, background, settingsButton, onePlayerButton, twoPlayerButton
+local highScoreButton, createButton, tableView
 local customFont
-local client, server, isClient, isServer, myPlayerID, playerDropped, clientDropped, numPlayers, clients, numberOfServers, connectionAttemptFailed
-
+local client, server, isClient, isServer, myPlayerID, playerDropped, clientDropped
+local numPlayers, clients, numberOfServers, connectionAttemptFailed
 
 -- Called when the scene's view does not exist:
 function scene:createScene( event )
@@ -31,9 +46,10 @@ function scene:createScene( event )
         return false
     end
 
-    numPlayers = 0
-    clients = {}
-    numberOfServers = 0
+    -- init networking values to 0
+    numPlayers = 0                  -- number of players connected to a server
+    clients = {}                    -- client table, used to keep track of clients
+    numberOfServers = 0             -- number of servers found
 end
 
 
@@ -41,12 +57,18 @@ end
 function scene:enterScene( event )
     local group = self.view
 
-    makeClient()
+    -- upon entry, always make the user a client, this allows users to view
+    -- other servers, if a user wants to be a server, clicking the create
+    -- button deletes his/her associated client object
+    makeClient() 
     
+    -- listener adds a server entry to the tableview
     Runtime:addEventListener("autolanServerFound", createListItem)
+
+    -- listener that notifies a client if it successfully connected to a server
     Runtime:addEventListener("autolanConnected", connectedToServer)
 
-    -- Create Button
+    -- Create button listener, removes client, and makes it a server
     local function handleCreatePress( event )
        if ( "ended" == event.phase ) then
             makeServer()
@@ -64,7 +86,7 @@ function scene:enterScene( event )
         onEvent = handleCreatePress
     }
 
-    --TableView
+    --TableView, render listener - used to display the content
     local function onRowRender( event )
         local row = event.row
         local rowHeight = row.contentHeight
@@ -81,11 +103,13 @@ function scene:enterScene( event )
         ip.y = row.height * 0.5 
     end
 
+    -- Tableview, row touch listener - if clicked, connect to server
     local function onRowTouch( event )
         local row = event.row
         client:connect(row.params.serverIP)
     end
 
+    -- tableview, used to display the list of servers
     local options =
     {
         left = 545,
@@ -98,6 +122,7 @@ function scene:enterScene( event )
     }
     tableView = widget.newTableView( options )
 
+    -- inserts a server entry into the tableview
     function insertARow(serverName, customBroadcast, serverIP)
         tableView:insertRow
         {
@@ -169,7 +194,9 @@ function scene:enterScene( event )
         onEvent = handleHighScorePress
     }
 
-    -- Function to handle back button
+    -- Function to handle back button, deletes all active listeners
+    -- If server, closes server
+    -- If client, closes client
     local function handleBackPress( event )
         if ( "ended" == event.phase ) then
             Runtime:removeEventListener("autolanConnectionFailed", connectionAttemptFailed)
@@ -251,6 +278,10 @@ function scene:destroyScene( event )
     local group = self.view
 end
 
+-- When the user clicks the create button, makeServer is executed
+-- this makes the user a server by starting up the server object
+-- created by the AutoLan library, it then creates the appropriate
+-- listeners for the server
 function makeServer()
     if(isClient) then --if we were a client before, we need to unregister all the event listeners
         isClient = false
@@ -263,10 +294,13 @@ function makeServer()
     server:start()
     isServer = true
 
-    --add event listeners
+    --add event listeners, checks when a player is added
     Runtime:addEventListener("autolanPlayerJoined", addPlayer)
 end
 
+-- if a user wants to play multiplayer, he/she is automatically set as a client
+-- client:start() inits the client and client:scanServers() searches for servers
+-- appropriate listeners are also created
 function makeClient()
     if(isServer) then --if we were a server before, we need to unregister all the event listeners
         isServer = false
@@ -279,11 +313,14 @@ function makeClient()
     Runtime:addEventListener("autolanDisconnected", connectionAttemptFailed)
 end
 
+-- event handler for when a server is found
 function createListItem(event) --displays found servers
     insertARow(event.serverName,event.customBroadcast,event.serverIP)
 end
 
 -- SERVER ACCEPTANCE CODE
+-- if a client connects to a server, this handler gets executed
+-- allows a server to accept a client invite or reject it
 addPlayer = function(event)
     local client = event.client --this is the client object, used to send messages
     local function onComplete( event )
@@ -309,16 +346,11 @@ addPlayer = function(event)
         end
     end
     native.showAlert( "Request", "Some wants to attack your house! Will you accept this request?", { "No", "Yes" }, onComplete )
-    -- client:sendPriority({1,numPlayers}) --initialization packet
-    -- client:sendPriority(getFullGameState()) --initialization packet 
-    -- server:setCustomBroadcast(numPlayers.." Players")
 end
 
 -- CLIENT ACCEPTANCE CODE
-connectionAttemptFailed = function(event)
-    print("connection failed")
-end
-
+-- if a client successfully connects to a server, it is sent to the multiplayer game
+-- screen, it then waits for the server to acknowledge its invite
 function connectedToServer(event)
     print("connected, waiting for sync")
     local options =         
@@ -328,11 +360,9 @@ function connectedToServer(event)
     storyboard.gotoScene( "MultiGameScreen", options ) 
 end
 
-function sendCommand(key,value) 
-    local command = {} 
-    command[1] = key 
-    command[2] = value
-    return state
+-- if connection was not successful
+connectionAttemptFailed = function(event)
+    print("connection failed")
 end
 
 scene:addEventListener( "createScene", scene )

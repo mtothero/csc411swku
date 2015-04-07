@@ -4,9 +4,36 @@ Frat Defense
 The following is a readme of the multiplayer portion of Frat Defense. This has 
 been broken down into the following sections: 
 
+	- Install/Run Instructions
 	- Analysis of the directory structure
 	- Examination of the networking procedures utilized 
 	- Design decisions considered while constructing Frat Defense
+
+################################################################################
+####                         Install/Run Instructions                       ####     
+####                                                                        #### 
+####                                                                        #### 
+####                                                                        #### 
+################################################################################
+
+In order to run Frat Defense on your computer, Corona Simulator must first be
+downloaded. Frat Defense was created using the Corona SDK. You can download it
+at https://coronalabs.com/products/corona-sdk/. 
+
+Once the download is complete, step through the installer which installs the 
+program. 
+
+Once the install has finished, launch Corona Simulator. You will be presented 
+with a home page. To open Frat Defense, click the Open button and navigate
+to the directory in which the Frat Defense game files are located. 
+
+Once you are there, click on main.lua. Frat Defense will now launch. 
+
+If you would like to play it on your Android phone, download the provided
+FratDefense.apk and transfer it over to your phone. Once it has been 
+transferred, install the apk by opening it. Once it has been installed, Frat 
+Defense is now ready to be played. 
+
 
 ################################################################################
 ####                          File Directory Analysis                       ####     
@@ -54,7 +81,7 @@ multiplayer:
 Most of the other files were either left alone or slightly modified. 
 
 ################################################################################
-####                    Networking Procedures Examination                  ####     
+####                    Networking Procedures Examination                   ####     
 ####                                                                        #### 
 ####                                                                        #### 
 ####                                                                        #### 
@@ -71,14 +98,14 @@ M.Y. Developers. Below is a list of features that AutoLan provides:
 	- Allows for packet priority
 	- Provides flow control
 
-Now one of the requirements of this project was to use TCP. Unfortunately, this
-library utilizes UDP with TCP integration such as flow control and reliability.
+Now one of the requirements of this project was to use TCP. This library 
+utilizes UDP with TCP integration such as flow control and reliability.
 This was an important item we had to consider since one of the main objectives
-of multiplayer is to make sure both players are in the same game state. That is,
-if I send a minion to my opponent, he better receive it or else my game would 
-continue to play thinking he received it. So to meet the requirements of TCP
-integration, we implemented the protocol's attributes through the use of 
-AutoLan's library.
+of multiplayer is to make sure both players are in the same game state at all 
+times. That is, if I send a minion to my opponent, he better receive it or else 
+my game would continue to play thinking he received it. So to meet the 
+requirements of TCP integration, we implemented the protocol's attributes 
+through the use of AutoLan's library.
 
 Another thing we had to consider was P2P or Client/Server. Technically, our  
 result was a mix of both. We're utilizing a P2P connection between two players
@@ -93,7 +120,9 @@ Player A being the server and Player B being the client:
 	  the client. If Player B denies the confirmation, Player A gets 
 	  disconnected.
     - Player B lays out some towers. Each tower placement sends a message to
-      Player A with these details. (More on Message Protocol layer)
+      Player A with these details. (More on Message Protocol layer) This is
+      accomplished by sending data back to the client after the client sends a
+      request to the server (Client sends a new state every tick).
     - Player A sends some minions. Each minion creation sends a message to 
       Player B with these details.
     - Player B finishes the game. End game results are sent to Player A.
