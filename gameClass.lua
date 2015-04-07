@@ -14,14 +14,14 @@ local commandString, needsInput
 ------------------------------------------------------
 local spawnTable = 
 {
-    [1] = {225, 5, 30, 10, "highSchooler"},
-    [2] = {250, 5,  35, 10, "highSchooler2"},
-    [3] = {1700, 10, 15, 20, "oldMan"},
-    [4] = {100, 10, 40, 20, "teacher"},
-    [5] = {2000, 20, 25, 40, "cop"},
-    [6] = {3000, 25, 25, 90, "cop2"},
-    [7] = {1700, 10, 15, 25, "oldMan2"},
-    [8] = {200, 10, 40, 20, "teacher2"},
+    [1] = {225, 5, 30, 10, "highSchooler", 50},
+    [2] = {250, 5,  35, 10, "highSchooler2", 75},
+    [3] = {1700, 10, 15, 20, "oldMan", 100},
+    [4] = {100, 10, 40, 20, "teacher", 125},
+    [5] = {2000, 20, 25, 40, "cop", 150},
+    [6] = {3000, 25, 25, 90, "cop2", 200},
+    [7] = {1700, 10, 15, 25, "oldMan2", 250},
+    [8] = {200, 10, 40, 20, "teacher2", 300},
     ['pledge'] = {75, 2, 50, 175, 'pledge'},
     ['bottleThrower'] = {100, 4, 150, 400, 'bottleThrower'},
     ['baller'] = {150, 4, 250, 500, 'Baller'},
@@ -88,12 +88,25 @@ local function deductRep(cost) --used to deduct rep points
     end 
     return false
 end 
+
 local function addRep(bounty)
-    repPoints = repPoints + bounty
-    repText.text = repPoints
-    score = score + repPoints + bounty
-    scoreText.text = score
-end 
+    if(isServer) then
+        repPoints = repPoints + bounty
+         repText.text = repPoints
+         score = score + repPoints + bounty
+        print(bounty)
+        scoreText.text = score
+    end 
+end
+
+local function addAttackPoints(bounty)
+    if(isServer == false) then 
+        attackPoints = attackPoints + bounty
+        attackPointsText.text = attackPoints
+        score = score + attackPoints + bounty 
+        scoreText.text = score
+    end
+end
 
 local function bottleThrower( event )
      if "ended" == event.phase then 
@@ -102,6 +115,7 @@ local function bottleThrower( event )
       end
  end
 
+
 -----------------------------------------------------
 --PUBLIC FUNCTIONS
 -----------------------------------------------------
@@ -109,6 +123,7 @@ local function bottleThrower( event )
 function game.new(isMulti) 	--constructor 
 	local newGame= {}
     multiplayer = isMulti
+    isServer = false
     levelRects = {}
     levelGroup = display.newGroup()
     towers     = display.newGroup()
@@ -120,10 +135,13 @@ function game.new(isMulti) 	--constructor
     towerChoosen = false
     towerName = nil
     repPoints  = 100
+    attackPoints = 100
+    attackScore = 0
     round = 1
     score = 0
     health = 100
     repText = display.newText(repPoints, 530, 80, "Helvetica", 69)
+    attackPointsText = display.newText('', 530, 80, "Helvetica",69)
     healthText = display.newText(health, 210, 80, "Helvetica", 69)
     roundText = display.newText(round, 1860, 1160, "Helvetica",53)
     scoreText = display.newText(score, 1050, 80, "Helvetica",  69)
@@ -135,6 +153,13 @@ function game.new(isMulti) 	--constructor
 	return setmetatable(newGame, game_mt)
 end
 
+function game.setServer(setNewServer)
+    isServer = setNewServer
+    if(isServer == false) then
+        repText.text = ""
+        attackPointsText.text = attackPoints 
+    end
+end
 
 --function touchScreen(event)
 function game.addTower(event)
@@ -223,11 +248,25 @@ function game:getmap()
 end
 
 function game.spawnSingleEnemy(spawnNumber)
-    local spawnX, spawnY
-    spawnX = 50
-    spawnY = 720
-    local enemy = Minion.new(spawnX, spawnY, 5, spawnTable[spawnNumber])
-    table.insert(minionTable, enemy)
+    if(isServer == false)then
+        if(attackPoints >= spawnTable[spawnNumber][6]) then
+            attackPoints = attackPoints - spawnTable[spawnNumber][6]
+            attackPointsText.text = attackPoints
+            local spawnX, spawnY
+            spawnX = 50
+            spawnY = 720
+            local enemy = Minion.new(spawnX, spawnY, table.getn(minionTable)*5 + timeBetweenRounds, spawnTable[spawnNumber])
+            table.insert(minionTable, enemy)
+            return true
+        end
+        return false
+    else
+        local spawnX, spawnY
+        spawnX = 50
+        spawnY = 720
+        local enemy = Minion.new(spawnX, spawnY, table.getn(minionTable)*5 + timeBetweenRounds, spawnTable[spawnNumber])
+        table.insert(minionTable, enemy)
+    end
 end
 
 function game:addMinions()
@@ -268,6 +307,9 @@ function game:play()
     if newRound == true then
         if(multiplayer==false) then 
             game:addMinions()
+        else
+            addAttackPoints(round * 200)
+
         end
         newRound = false 
         print("ADDED MINIONS!")
@@ -299,11 +341,13 @@ function game:play()
                 minionTable[i]:kill()
                 health = health - minionTable[i]:getDamage()
                 healthText.text = health
+                addAttackPoints(minionTable[i].getBounty())
                 if health <= 0 then
                     endGame = true
                     table.remove(minionTable, i)
                     return
                 end 
+
             else 
                 minionTable[i]:move(2)
             end
@@ -347,6 +391,13 @@ function game:play()
             elseif(#minionTable == 0 and round == maxRounds) then
                 endGame = true 
             end
+        elseif(#minionTable == 0 and attackPoints <= 50 and round <maxRounds) then 
+            round = round + 1
+            roundText.text = round
+            newRound = true
+        elseif(#minionTable == 0 and attackPoints <= 50 and round == maxRounds) then
+            endGame = true
+
         end
     end
 end

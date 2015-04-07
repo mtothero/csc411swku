@@ -82,11 +82,13 @@ function scene:enterScene( event )
     if(isClient) then
         createClientGUI()
         mapURL = "Assets/clientMap.jpg"
+        game.setServer(false)
     end
 
     if(isServer) then
         createServerGUI()
         mapURL = "Assets/map.jpg"
+        game.setServer(true)
     end
 
     game:mapCreate(mapURL)
@@ -298,10 +300,11 @@ function createClientGUI()
 
     local function handleHighschoolerMinion( event )
         if("ended" == event.phase ) then
-            game.spawnSingleEnemy(1)
-            client:sendPriority({2,1})
-        end 
-    end
+            if(game.spawnSingleEnemy(1))then 
+                client:sendPriority({2,1})
+            end 
+        end
+    end 
     highschoolerMinion = widget.newButton
     {
         x = 256,
@@ -313,8 +316,9 @@ function createClientGUI()
 
     local function handleHighschooler2Minion( event )
         if("ended" == event.phase ) then
-            game.spawnSingleEnemy(2)
-            client:sendPriority({2,2})
+            if(game.spawnSingleEnemy(2)) then 
+                client:sendPriority({2,2})
+            end
         end 
     end
     highschooler2Minion = widget.newButton
@@ -328,8 +332,9 @@ function createClientGUI()
 
     local function handleOldManMinion( event )
         if("ended" == event.phase ) then
-            game.spawnSingleEnemy(3)
-            client:sendPriority({2,3})
+            if(game.spawnSingleEnemy(3)) then
+                client:sendPriority({2,3})
+            end
         end 
     end
     oldManMinion = widget.newButton
@@ -343,8 +348,9 @@ function createClientGUI()
 
     local function handleOldMan2Minion( event )
         if("ended" == event.phase ) then
-            game.spawnSingleEnemy(7)
-            client:sendPriority({2,7})
+            if(game.spawnSingleEnemy(7)) then 
+                 client:sendPriority({2,7})
+            end
         end 
     end
     oldMan2Minion = widget.newButton
@@ -358,9 +364,10 @@ function createClientGUI()
 
     local function handleTeacherMinion( event )
         if("ended" == event.phase ) then
-            game.spawnSingleEnemy(4)
-            client:sendPriority({2,4})
-        end 
+            if(game.spawnSingleEnemy(4)) then
+                client:sendPriority({2,4})
+            end 
+        end
     end
     teacherMinion = widget.newButton
     {
@@ -373,10 +380,11 @@ function createClientGUI()
 
     local function handleTeacher2Minion( event )
         if("ended" == event.phase ) then
-            game.spawnSingleEnemy(8)
-            client:sendPriority({2,8})
-        end 
-    end
+            if(game.spawnSingleEnemy(8))then 
+                 client:sendPriority({2,8})
+            end 
+        end
+    end 
     teacher2Minion = widget.newButton
     {
         x = 356,
