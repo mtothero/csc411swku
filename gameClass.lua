@@ -253,7 +253,7 @@ function game.spawnSingleEnemy(spawnNumber)
             local spawnX, spawnY
             spawnX = 50
             spawnY = 720
-            local enemy = Minion.new(spawnX, spawnY, table.getn(minionTable)*5 + timeBetweenRounds, spawnTable[spawnNumber])
+            local enemy = Minion.new(spawnX, spawnY, table.getn(minionTable)*5 + timeUntilNextRound, spawnTable[spawnNumber])
             table.insert(minionTable, enemy)
             return true
         end
@@ -262,7 +262,7 @@ function game.spawnSingleEnemy(spawnNumber)
         local spawnX, spawnY
         spawnX = 50
         spawnY = 720
-        local enemy = Minion.new(spawnX, spawnY, table.getn(minionTable)*5 + timeBetweenRounds, spawnTable[spawnNumber])
+        local enemy = Minion.new(spawnX, spawnY, table.getn(minionTable)*5 + timeUntilNextRound, spawnTable[spawnNumber])
         table.insert(minionTable, enemy)
     end
 end
@@ -330,10 +330,11 @@ function game:play()
                 minionTable[i]:move(1)
             elseif(map[mapRectsNum] == 4) then
                 table.insert(removeNum, i)
+                addAttackPoints(minionTable[i].getBounty())
                 minionTable[i]:kill()
                 health = health - minionTable[i]:getDamage()
                 healthText.text = health
-                addAttackPoints(minionTable[i].getBounty())
+                
                 if health <= 0 then
                     endGame = true
                     table.remove(minionTable, i)
