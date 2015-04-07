@@ -1,3 +1,17 @@
+--[[/************************************************************/
+/* Author:  Dave Clymer, Matt Tothero                           */
+/* Creation Date: March 2014                                    */
+/* Modification Date: 4/7/2015                                  */
+/* Course: CSC411                                               */
+/* Professor Name: Dr. Frye                                     */
+/* Filename: MultiGameScreen                                    */
+/* Purpose: Displays the game between two users. Handles both   */
+/*          client and server displays.                         */
+/* NOTE: More inline documentation has been provided here since */
+/*       this file contains alot of networking concepts         */
+/*       that pertain to this assignment.                       */
+/************************************************************/--]]
+
 local storyboard = require( "storyboard" )
 local scene = storyboard.newScene()
 local widget = require( "widget" )
@@ -9,6 +23,9 @@ map = game.getmap()
 local isServer, isClient, mapURL
 local client, server, clients, numPlayers, serverStatus, score
 
+-- called once the games end, server replies back with a message
+-- stating whether or not it lost/won
+-- follows message protocol layed out in the readme
 function endGameScreen(scene, score)
     if(isServer) then
         if(scene == "loseScreen") then
@@ -21,6 +38,9 @@ function endGameScreen(scene, score)
             end
         end
 
+        -- this timer is needed to allow the final message to be sent
+        -- we wouldn't want the server to shut down before the message 
+        -- was sent
         listener = {}
         function listener:timer( event )
             local options =
@@ -42,6 +62,9 @@ function scene:createScene( event )
 
     local aParams = event.params
 
+    -- these parameters come from the multiPlayerSetupScreen
+    -- based off of these parameters determine which listeners
+    -- and variables are activated
     if aParams then
         client = aParams.var1
         server = aParams.var2
@@ -79,12 +102,14 @@ function scene:enterScene( event )
 	local group = self.view
 
     --isClient = true
+    -- if you are the client, we need the client gui
     if(isClient) then
         createClientGUI()
         mapURL = "Assets/clientMap.jpg"
         game.setServer(false)
     end
 
+    -- if you are the server, we need the server gui
     if(isServer) then
         createServerGUI()
         mapURL = "Assets/map.jpg"
@@ -94,6 +119,7 @@ function scene:enterScene( event )
     game:mapCreate(mapURL)
     gameTimer = timer.performWithDelay(100, game, 0)
     
+    -- if we are the client, we wait until the server accepts our invite to continue
     if(isClient) then
         timer.pause(gameTimer)
     end
@@ -155,6 +181,9 @@ end
 
 
 -- Called when scene is about to move offscreen:
+-- disconnect all clients from the server, shut down the server
+-- for cleanup, call client's disconnect method too - this allows
+-- for rematches
 function scene:exitScene( event )
 	local group = self.view
     map:removeSelf()
@@ -209,6 +238,7 @@ function scene:destroyScene( event )
 	local group = self.view
 end
 
+-- this creates the server gui which includes all towers
 function createServerGUI()
     local function handlePledge( event )
         if("ended" == event.phase ) then
@@ -267,6 +297,7 @@ function createServerGUI()
     }
 end
 
+-- this creates the client gui which includes all minions
 function createClientGUI() 
     local function handleCopMinion( event )
         if("ended" == event.phase ) then
@@ -410,6 +441,10 @@ function touchScreen(event)
 end
 
 -- CLIENT RETRIEVAL CODE
+-- Follows message protocol defined in the readme
+-- if a client recieves a message, this handler will be executed
+-- occurs when client recieves an ack from the server after a message is sent
+-- even though UDP doesn't support this, its been implemented via the autolan library
 clientReceived = function(event)
     print("client received")
     local message = event.message
@@ -458,6 +493,8 @@ clientReceived = function(event)
 end
 
 -- SERVER RETRIEVAL CODE
+-- follows message protocol explained in the readme
+-- if a server recieves a message, this handler gets executed
 serverReceived = function(event)
     print("server received")
     local message = event.message 

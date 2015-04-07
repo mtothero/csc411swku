@@ -1,0 +1,32 @@
+Frat Defense was originally created in Spring of 2014. It was the main project
+for Dr. Parson's Software Engineering class with the team of Josh Smith, Dave
+Clymer, Alec McCloskey, and Matt Tothero. Because our class teamed up with a CDE
+class, we were able to get 2 art students to join us in helping us with the 
+front end of things. They were Kyle DeSimone and Trevor Dilg. With the team now
+created, we went ahead and created a tower defense game. 
+
+Our final release included a functional and entertaining tower defense game. We
+ended up getting an A on the project. Since then, the game development was put 
+on hold. We finished that semester with the idea that a lot more can be done to 
+the game. With the requirement of a network related app in CSC411, here was our 
+chance to extend Frat Defense to allow multiplayer. Having the ability to play
+against other people would really spice up Frat Defense. It would provide a 
+whole other area of competition and challenge that an AI could not. One key 
+aspect of this idea would be to allow one user to play against another user who
+are both sitting in the same room. Not only does one receive bragging rights 
+over the other after defeating that person, he/she also gets the chance of 
+instantly rubbing this win directly into the other person's face.
+
+The team of Dave Clymer and Matt Tothero went ahead and implemented multiplayer.
+It has given us the chance to work with networking libraries and concepts. Not
+only have we learned the quirks in network programming (and there sure are 
+a lot), we also got to learn how to test networking apps. For example, if
+we wanted to test the server sided code that was created, we had to make sure we 
+were tested a server setup.     
+
+In order to test multiplayer, 2 Android phones connected to the same network
+are needed. Also, this network must allow devices to communicate to each other
+(Kutztown's Bearnet network did not). To demonstrate multiplayer, a video has 
+been created. It shows how to play against another person. If you have any
+questions, please don't hesitate to ask. My email address is 
+mtoth190@live.kutztown.edu.
