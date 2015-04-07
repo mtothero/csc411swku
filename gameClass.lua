@@ -122,7 +122,7 @@ local function bottleThrower( event )
 function game.new(isMulti) 	--constructor 
 	local newGame= {}
     multiplayer = isMulti
-    isServer = false
+    isServer = true
     levelRects = {}
     levelGroup = display.newGroup()
     towers     = display.newGroup()
