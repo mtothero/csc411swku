@@ -152,6 +152,9 @@ function game.new(isMulti) 	--constructor
 	return setmetatable(newGame, game_mt)
 end
 
+--function setServer(setNewServer)
+--This sets the current game as either being
+--the server or the client.
 function game.setServer(setNewServer)
     isServer = setNewServer
     if(isServer == false) then
@@ -182,10 +185,13 @@ function game.addTower(event)
     return false
 end
 
+--Client side version of addTower
+--This is important since it doesn't keep track of rep points.
 function game.addTowerClient(myTower)   
     table.insert(towerTable,Tower.new(myTower.x, myTower.y, spawnTable[myTower.towerString]))
 end
 
+--Creates the map
 function game:mapCreate(mapURL)
 	local i 
 	for i = 1, #map do   
@@ -232,6 +238,7 @@ function game:mapCreate(mapURL)
     levelGroup.y = 35
 end
 
+--sets up all display objects for the game
 function game:getmap()
     gameMap:insert(levelGroup)
     gameMap:insert(towers)
@@ -242,6 +249,9 @@ function game:getmap()
     return gameMap
 end
 
+--Spawns a single enemy.
+--The server also keeps track of attackPoints, so even though it is still
+--seperate via if/else statement, they both remove attackpoints
 function game.spawnSingleEnemy(spawnNumber)
     if(isServer == false)then
         if(attackPoints >= spawnTable[spawnNumber][6]) then
@@ -265,6 +275,7 @@ function game.spawnSingleEnemy(spawnNumber)
     end
 end
 
+--adds singleplayer minions
 function game:addMinions()
     local spawnX, spawnY
     local i
@@ -293,6 +304,7 @@ function game:addMinions()
     end
 end
 
+--plays the game
 function game:play()
     if newRound == true then
         if(multiplayer==false) then 
@@ -454,6 +466,7 @@ function game:shoot(minionHit, towerShoot)
     transition.to ( bullet, { time = 100, x = minionHit.x, y = minionHit.y} )
 end
 
+--helper method when hardware back button is pressed.
 function game.removeUNR()
     timeUNRText.text = ""
     timeUNRText.isVisible = false
