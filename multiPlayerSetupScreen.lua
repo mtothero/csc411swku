@@ -38,8 +38,6 @@ function scene:createScene( event )
         local phase = event.phase;
         local keyName = event.keyName;
         if ( "back" == keyName and phase == "up" ) then
-            tableView = nil
-            createButton = nil
             storyboard.hideOverlay( "fade", 200 )
             return true
         end
