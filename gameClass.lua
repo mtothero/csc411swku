@@ -91,9 +91,8 @@ end
 local function addRep(bounty)
     if(isServer) then
         repPoints = repPoints + bounty
-         repText.text = repPoints
-         score = score + repPoints + bounty
-        print(bounty)
+        repText.text = repPoints
+        score = score + repPoints + bounty
         scoreText.text = score
     end 
 end

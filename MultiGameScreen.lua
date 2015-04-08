@@ -310,7 +310,7 @@ function createClientGUI()
     copMinion = widget.newButton
     {
         x = 56,
-        y = 930,
+        y = 1080,
         defaultFile = "Assets/copButton.png",
         overFile = "Assets/copButtonPressed.png",
         onEvent = handleCopMinion
@@ -326,7 +326,7 @@ function createClientGUI()
     cop2Minion = widget.newButton
     {
         x = 156,
-        y = 930,
+        y = 1080,
         defaultFile = "Assets/cop2Button.png",
         overFile = "Assets/cop2ButtonPressed.png",
         onEvent = handleCop2Minion
@@ -341,7 +341,7 @@ function createClientGUI()
     end 
     highschoolerMinion = widget.newButton
     {
-        x = 256,
+        x = 56,
         y = 930,
         defaultFile = "Assets/highSchoolerButton.png",
         overFile = "Assets/highSchoolerButtonPressed.png",
@@ -357,7 +357,7 @@ function createClientGUI()
     end
     highschooler2Minion = widget.newButton
     {
-        x = 356,
+        x = 156,
         y = 930,
         defaultFile = "Assets/highSchooler2Button.png",
         overFile = "Assets/highSchooler2ButtonPressed.png",
@@ -373,8 +373,8 @@ function createClientGUI()
     end
     oldManMinion = widget.newButton
     {
-        x = 56,
-        y = 1080,
+        x = 256,
+        y = 930,
         defaultFile = "Assets/oldManButton.png",
         overFile = "Assets/oldManButtonPressed.png",
         onEvent = handleOldManMinion
@@ -389,7 +389,7 @@ function createClientGUI()
     end
     oldMan2Minion = widget.newButton
     {
-        x = 156,
+        x = 256,
         y = 1080,
         defaultFile = "Assets/oldMan2Button.png",
         overFile = "Assets/oldMan2ButtonPressed.png",
@@ -405,8 +405,8 @@ function createClientGUI()
     end
     teacherMinion = widget.newButton
     {
-        x = 256,
-        y = 1080,
+        x = 356,
+        y = 930,
         defaultFile = "Assets/teacherButton.png",
         overFile = "Assets/teacherButtonPressed.png",
         onEvent = handleTeacherMinion
