@@ -34,6 +34,9 @@ FratDefense.apk and transfer it over to your phone. Once it has been
 transferred, install the apk by opening it. Once it has been installed, Frat 
 Defense is now ready to be played. 
 
+If you would like to view the source files using a text editor, we suggest 
+Notepad++ or Sublime as these two editors are already configured to view lua
+files.
 
 ################################################################################
 ####                          File Directory Analysis                       ####     

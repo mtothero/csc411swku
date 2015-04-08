@@ -22,11 +22,11 @@ It has given us the chance to work with networking libraries and concepts. Not
 only have we learned the quirks in network programming (and there sure are 
 a lot), we also got to learn how to test networking apps. For example, if
 we wanted to test the server sided code that was created, we had to make sure we 
-were tested a server setup.     
+were testing a server setup.     
 
 In order to test multiplayer, 2 Android phones connected to the same network
 are needed. Also, this network must allow devices to communicate to each other
 (Kutztown's Bearnet network did not). To demonstrate multiplayer, a video has 
-been created. It shows how to play against another person. If you have any
+been created. It shows the multiplayer version in action. If you have any
 questions, please don't hesitate to ask. My email address is 
 mtoth190@live.kutztown.edu.
