@@ -455,7 +455,7 @@ function game:shoot(minionHit, towerShoot)
     transition.to ( bullet, { time = 100, x = minionHit.x, y = minionHit.y} )
 end
 
-function game:removeUNR()
+function game.removeUNR()
     timeUNRText.text = ""
     timeUNRText.isVisible = false
     timeUNRText:removeSelf()

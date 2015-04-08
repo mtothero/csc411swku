@@ -36,17 +36,19 @@ end
 function scene:createScene( event )
 	local group = self.view
 
-    function onKeyEvent( event )
+
+end
+
+local function onKeyEvent( event )
         local phase = event.phase;
         local keyName = event.keyName;
         if ( "back" == keyName and phase == "up" ) then
+            game.removeUNR()
             storyboard.gotoScene( "mainMenuScreen" )
             return true
         end
         return false
-    end
 end
-
 
 -- Called immediately after scene has moved onscreen:
 function scene:enterScene( event )
@@ -215,6 +217,9 @@ scene:addEventListener( "exitScene", scene )
 scene:addEventListener( "destroyScene", scene )
 
 scene:addEventListener( "didExitScene", scene )
+
+scene:addEventListener("key", onKeyEvent)
+
 
 ---------------------------------------------------------------------------------
 
