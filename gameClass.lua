@@ -456,7 +456,9 @@ function game:shoot(minionHit, towerShoot)
 end
 
 function game:removeUNR()
+    timeUNRText.text = ""
     timeUNRText.isVisible = false
+    timeUNRText:removeSelf()
 end 
 
 function onCollision(event)

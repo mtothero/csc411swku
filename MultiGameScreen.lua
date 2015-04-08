@@ -89,6 +89,7 @@ function scene:createScene( event )
         local phase = event.phase;
         local keyName = event.keyName;
         if ( "back" == keyName and phase == "up" ) then
+            game:removeUNR()
             storyboard.gotoScene( "mainMenuScreen" )
             return true
         end
@@ -301,8 +302,9 @@ end
 function createClientGUI() 
     local function handleCopMinion( event )
         if("ended" == event.phase ) then
-            game.spawnSingleEnemy(5)
-            client:sendPriority({2,5})
+            if(game.spawnSingleEnemy(5))then 
+                 client:sendPriority({2,5})
+            end
         end 
     end
     copMinion = widget.newButton
@@ -316,8 +318,9 @@ function createClientGUI()
 
     local function handleCop2Minion( event )
         if("ended" == event.phase ) then
-            game.spawnSingleEnemy(6)
-            client:sendPriority({2,6})
+            if(game.spawnSingleEnemy(6))then 
+                client:sendPriority({2,6})
+            end
         end 
     end
     cop2Minion = widget.newButton
@@ -522,6 +525,7 @@ scene:addEventListener( "destroyScene", scene )
 
 scene:addEventListener( "didExitScene", scene )
 
+scene:addEventListener("key", onKeyEvent)
 ---------------------------------------------------------------------------------
 
 return scene
