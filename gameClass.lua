@@ -458,6 +458,7 @@ function game.removeUNR()
     timeUNRText.text = ""
     timeUNRText.isVisible = false
     timeUNRText:removeSelf()
+    scoreText.removeSelf()
 end 
 
 function onCollision(event)
