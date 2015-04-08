@@ -474,6 +474,12 @@ function game.removeUNR()
     scoreText.text = ""
     scoreText.isVisible = false
     scoreText:removeSelf()
+    if(isServer == false) then
+        attackPointsText.text = ""
+        attackPointsText.isVisible = false
+        attackPointsText:removeSelf()
+    end
+
 end 
 
 function onCollision(event)
