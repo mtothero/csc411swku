@@ -39,6 +39,7 @@ function scene:createScene( event )
 
 end
 
+--checks if hardware back button was pressed.
 local function onKeyEvent( event )
         local phase = event.phase;
         local keyName = event.keyName;

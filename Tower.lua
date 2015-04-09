@@ -14,6 +14,7 @@ local Tower = {}
 local Tower_mt = {__index = Tower}
 local widget = require( "widget" )
 
+--Tower constructor
 function Tower.new(initX, initY, table)
 	local newTower ={
 		damage = table[1] or 100,
@@ -31,6 +32,9 @@ function Tower.new(initX, initY, table)
 	return setmetatable(newTower, Tower_mt)
 end
 
+
+--Sets the tower to the backswing state.
+--This will also create the bullet and animate the image.
 function Tower:attack(minionHit, theGame)
 	if(self.backSwing == 0) then
 		minionDeath = minionHit:hit(self.damage)
@@ -61,6 +65,8 @@ function Tower:remove()
 	self.towerImage.isVisible = false
 end
 
+--Every frame, the backswing should go back 1.
+--Once it is at 0, the tower can shoot again.
 function Tower:decrementBackSwing()
 	if(self.backSwing > 0) then
 		self.backSwing = self.backSwing - 1

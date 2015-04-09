@@ -407,6 +407,9 @@ function game:play()
     end
 end
 
+
+--Every so many ticks, plays through another
+--frame of the game.
 function game:timer(event)
     self:play()
     if(endGame == true) then
@@ -415,6 +418,8 @@ function game:timer(event)
     end
 end
 
+--Sets whether the game was a loss or a win
+--for the server.
 function game:finishGame()
     if(health <= 0 ) then 
         endGameScreen("loseScreen", score)
@@ -423,6 +428,8 @@ function game:finishGame()
     end 
 end 
 
+--Wipes the grid of all minions.
+--Used when restarting the game.
 function game:minionWipe()
     minionTemp = table.remove(minionTable)
     while minionTemp do
@@ -431,6 +438,8 @@ function game:minionWipe()
     end
 end
  
+--Wipes the grid of all towers.
+--Mostly used when restarting the game
 function game:towerWipe()
     towerTemp = table.remove(towerTable)
     while towerTemp do 
@@ -439,6 +448,7 @@ function game:towerWipe()
     end 
 end
 
+--Checks if a minion is in range for a tower
 function game:checkHit(towerCheck, minionCheck)
     local rangeCheck = towerCheck:getRange()
     local minionX = minionCheck:getX()
@@ -452,11 +462,13 @@ function game:checkHit(towerCheck, minionCheck)
     return 0
 end 
 
+--Determines current defender tower to place
 function game:towerChoosen(name)
     towerChoosen = true
     towerName = name
 end
 
+--Creates the bullet and starts its movement across the screen
 function game:shoot(minionHit, towerShoot)
     local bullet = display.newImage("Assets/bullet.png")
     physics.addBody(bullet, {density = 1, friction = 0, bounce = 0});
@@ -482,6 +494,7 @@ function game.removeUNR()
 
 end 
 
+--Checks if bullet has finally reached its destination
 function onCollision(event)
     if(event.object2.myName=="bullet") then    
         event.object2.isVisible = false
