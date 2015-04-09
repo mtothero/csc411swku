@@ -271,7 +271,7 @@ function createServerGUI()
 
     local function handleBasketBallTower( event )
         if("ended" == event.phase ) then
-            game:towerChoosen('baller')
+            game:towerChoosen('Baller')
         end 
     end
     basketballTower = widget.newButton

@@ -35,7 +35,7 @@ local spawnTable =
     [8] = {200, 10, 40, 20, "teacher2", 300},
     ['pledge'] = {75, 2, 50, 175, 'pledge'},
     ['bottleThrower'] = {100, 4, 150, 400, 'bottleThrower'},
-    ['baller'] = {150, 4, 250, 500, 'Baller'},
+    ['Baller'] = {150, 4, 250, 500, 'Baller'},
     ['footballer'] = {200, 5, 500, 250, 'footballer'}
 }
 
@@ -132,7 +132,7 @@ function game.new(isMulti) 	--constructor
     towerTable = {}
     towerChoosen = false
     towerName = nil
-    repPoints  = 100
+    repPoints  = 1000
     attackPoints = 100
     newAP = 0
     attackScore = 0

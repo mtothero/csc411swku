@@ -353,11 +353,11 @@ local function receive()
 				noError=true
 		----print("recieved", #message)
 				message = json.decode(message)
-				if(message[1] == "e") then
-					return
-				end
 	--			prevoiuspacket = message[1][2]
 				if(message) then
+					if(message[1] == "e") then
+						return
+					end
 					------transport layer ---------------------------------------------------
 					clientInfo.numMessages = clientInfo.numMessages+1
 					if(message[2][1]==2) then
